@@ -17,19 +17,19 @@ jobs:
           name: Tag docker image
           command: |
             set -e
-            TAG=tag-image.sh
-            curl -O --fail ${CIRCLECI_SCRIPT_DIR}/${TAG}
-            chmod 700 ./${TAG}
-            ./${TAG}
+            declare -r NAME="${CIRCLE_PROJECT_REPONAME}"
+            declare -r SHA="${CIRCLE_SHA1}"
+            docker tag cyberdojo/${NAME}:latest cyberdojo/${NAME}:${SHA:0:7}
       - run:
           name: Publish tagged docker image on dockerhub
           command: |
             set -e
-            PUBLISH=publish-tagged-image.sh
-            curl -O --fail ${CIRCLECI_SCRIPT_DIR}/${PUBLISH}
-            chmod 700 ./${PUBLISH}
             echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
-            ./${PUBLISH}
+            declare -r NAME="${CIRCLE_PROJECT_REPONAME}"
+            declare -r SHA="${CIRCLE_SHA1}"
+            docker push cyberdojo/${NAME}:${SHA:0:7}
+            docker push cyberdojo/${NAME}:latest
+            docker logout
 
   deploy-to-beta:
     docker:

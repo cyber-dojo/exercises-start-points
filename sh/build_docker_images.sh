@@ -17,8 +17,10 @@ cd ${TMP_DIR}
 curl -O --silent --fail "${GITHUB_ORG}/${REPO_NAME}/${BRANCH_NAME}/${SCRIPT_NAME}"
 chmod 700 ./${SCRIPT_NAME}
 
+readonly IMAGE_NAME=cyberdojo/exercises-start-points:latest
+
 SHA="${SHA_VALUE}" \
   ./${SCRIPT_NAME} start-point create \
-    cyberdojo/exercises \
+    ${IMAGE_NAME} \
       --exercises \
         https://github.com/cyber-dojo/exercises-start-points.git

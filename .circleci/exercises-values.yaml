@@ -17,7 +17,7 @@ volumes:
 
 containers:
   - name: exercises
-    image: cyberdojo/exercises
+    image: cyberdojo/exercises-start-points
     securityContext:
       runAsUser: 65534 # nobody
       fsGroup: 65534 # nobody
