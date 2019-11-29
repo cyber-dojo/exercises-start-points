@@ -15,12 +15,14 @@ volumes:
       medium: Memory
       sizeLimit: "16Mi"
 
+podSecurityContext:
+  runAsUser: 65534 # nobody
+  fsGroup: 65534 # nobody
+
 containers:
   - name: exercises-start-points
     image: cyberdojo/exercises-start-points
     securityContext:
-      runAsUser: 65534 # nobody
-      fsGroup: 65534 # nobody
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
     volumeMounts:
