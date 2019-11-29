@@ -10,7 +10,7 @@ service:
     prometheus.io/port: "4535"
 
 volumes:
-  - name: exercises-tmp-dir
+  - name: exercises-start-points-tmp-dir
     emptyDir:
       medium: Memory
       sizeLimit: "16Mi"
@@ -24,7 +24,7 @@ containers:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
     volumeMounts:
-      - name: exercises-tmp-dir
+      - name: exercises-start-points-tmp-dir
         mountPath: /tmp
         readOnly: false
     resources:
