@@ -16,6 +16,7 @@ fi
 readonly SCRIPT_PATH=${ROOT_DIR}/../commander/cyber-dojo
 readonly IMAGE_NAME=cyberdojo/custom-start-points
 
+CYBER_DOJO_EXERCISES_PORT=4535 \
 SHA="${SHA_VALUE}" \
   ${SCRIPT_PATH} start-point create \
     ${IMAGE_NAME} \

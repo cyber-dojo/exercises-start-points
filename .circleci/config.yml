@@ -49,8 +49,8 @@ jobs:
               --install \
               --namespace=beta \
               --set-string containers[0].tag=${CIRCLE_SHA1:0:7} \
-              -f .circleci/exercises-values.yaml \
-              beta-exercises \
+              -f .circleci/exercises-start-points-values.yaml \
+              beta-exercises-start-points \
               praqma/cyber-dojo-service \
               --version 0.2.3
 
@@ -72,8 +72,8 @@ jobs:
               --install \
               --namespace=prod \
               --set-string containers[0].tag=${CIRCLE_SHA1:0:7} \
-              -f .circleci/exercises-values.yaml \
-              prod-exercises \
+              -f .circleci/exercises-start-points-values.yaml \
+              prod-exercises-start-points \
               praqma/cyber-dojo-service \
               --version 0.2.3
 
