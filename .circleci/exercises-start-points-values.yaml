@@ -16,7 +16,7 @@ volumes:
       sizeLimit: "16Mi"
 
 containers:
-  - name: exercises
+  - name: exercises-start-points
     image: cyberdojo/exercises-start-points
     securityContext:
       runAsUser: 65534 # nobody
