@@ -2,7 +2,8 @@ version: 2
 jobs:
   build-image:
 
-    machine: true
+    machine:
+      image: ubuntu-1604:201903-01
 
     working_directory: ~/repo
 
@@ -24,9 +25,9 @@ jobs:
           name: Publish tagged docker image on dockerhub
           command: |
             set -e
-            echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
             declare -r NAME="${CIRCLE_PROJECT_REPONAME}"
             declare -r SHA="${CIRCLE_SHA1}"
+            echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
             docker push cyberdojo/${NAME}:${SHA:0:7}
             docker push cyberdojo/${NAME}:latest
             docker logout
@@ -37,19 +38,24 @@ jobs:
     steps:
       - checkout
       - run:
-          name: authenticate with gcloud and deploy with helm
+          name: Authenticate with gcloud and deploy with helm
           command: |
             set -e
             echo $GCP_K8S_CREDENTIALS > /gcp/gcp-credentials.json
-            gcloud auth activate-service-account "$SERVICE_ACCOUNT" --key-file=/gcp/gcp-credentials.json
-            gcloud container clusters get-credentials "$CLUSTER" --zone "$ZONE" --project "$PROJECT"
+            gcloud auth activate-service-account \
+              "$SERVICE_ACCOUNT" \
+              --key-file=/gcp/gcp-credentials.json
+            gcloud container clusters get-credentials \
+              "$CLUSTER" \
+              --zone "$ZONE" \
+              --project "$PROJECT"
             helm init --client-only
             helm repo add praqma https://praqma-helm-repo.s3.amazonaws.com/
             helm upgrade \
               --install \
               --namespace=beta \
               --set-string containers[0].tag=${CIRCLE_SHA1:0:7} \
-              -f .circleci/exercises-start-points-values.yaml \
+              --values .circleci/exercises-start-points-values.yaml \
               beta-exercises-start-points \
               praqma/cyber-dojo-service \
               --version 0.2.4
@@ -60,19 +66,24 @@ jobs:
     steps:
       - checkout
       - run:
-          name: authenticate with gcloud and deploy with helm
+          name: Authenticate with gcloud and deploy with helm
           command: |
             set -e
             echo $GCP_K8S_CREDENTIALS > /gcp/gcp-credentials.json
-            gcloud auth activate-service-account "$SERVICE_ACCOUNT" --key-file=/gcp/gcp-credentials.json
-            gcloud container clusters get-credentials "$CLUSTER" --zone "$ZONE" --project "$PROJECT"
+            gcloud auth activate-service-account \
+              "$SERVICE_ACCOUNT" \
+              --key-file=/gcp/gcp-credentials.json
+            gcloud container clusters get-credentials \
+              "$CLUSTER" \
+              --zone "$ZONE" \
+              --project "$PROJECT"
             helm init --client-only
             helm repo add praqma https://praqma-helm-repo.s3.amazonaws.com/
             helm upgrade \
               --install \
               --namespace=prod \
               --set-string containers[0].tag=${CIRCLE_SHA1:0:7} \
-              -f .circleci/exercises-start-points-values.yaml \
+              --values .circleci/exercises-start-points-values.yaml \
               prod-exercises-start-points \
               praqma/cyber-dojo-service \
               --version 0.2.4
