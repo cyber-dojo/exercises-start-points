@@ -2,7 +2,6 @@
 set -e
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
-readonly SHA_VALUE=$(cd "${ROOT_DIR}" && git rev-parse HEAD)
 
 readonly GITHUB_ORG=https://raw.githubusercontent.com/cyber-dojo
 readonly REPO_NAME=commander
@@ -17,11 +16,12 @@ cd ${TMP_DIR}
 curl -O --silent --fail "${GITHUB_ORG}/${REPO_NAME}/${BRANCH_NAME}/${SCRIPT_NAME}"
 chmod 700 ./${SCRIPT_NAME}
 
+export SHA=$(cd "${ROOT_DIR}" && git rev-parse HEAD)
+export CYBER_DOJO_EXERCISES_PORT=4525
+
 readonly IMAGE_NAME=cyberdojo/exercises-start-points:latest
 
-CYBER_DOJO_EXERCISES_PORT=4525 \
-SHA="${SHA_VALUE}" \
-  ./${SCRIPT_NAME} start-point create \
-    ${IMAGE_NAME} \
-      --exercises \
-        https://github.com/cyber-dojo/exercises-start-points.git
+./${SCRIPT_NAME} start-point create \
+  ${IMAGE_NAME} \
+    --exercises \
+      https://github.com/cyber-dojo/exercises-start-points.git
