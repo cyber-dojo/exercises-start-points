@@ -17,7 +17,6 @@ curl -O --silent --fail "${GITHUB_ORG}/${REPO_NAME}/${BRANCH_NAME}/${SCRIPT_NAME
 chmod 700 ./${SCRIPT_NAME}
 
 export SHA=$(cd "${ROOT_DIR}" && git rev-parse HEAD)
-export CYBER_DOJO_EXERCISES_PORT=4525
 
 readonly IMAGE_NAME=cyberdojo/exercises-start-points:latest
 

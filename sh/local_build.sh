@@ -16,7 +16,6 @@ readonly SCRIPT_PATH=${ROOT_DIR}/../commander/cyber-dojo
 readonly IMAGE_NAME=cyberdojo/custom-start-points
 
 export SHA=$(cd "${ROOT_DIR}" && git rev-parse HEAD)
-export CYBER_DOJO_EXERCISES_PORT=4525
 
 ${SCRIPT_PATH} start-point create \
   ${IMAGE_NAME} \
