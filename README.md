@@ -1,5 +1,5 @@
 
-[![CircleCI](https://circleci.com/gh/cyber-dojo/exercises.svg?style=svg)](https://circleci.com/gh/cyber-dojo/exercises-start-points)
+[![CircleCI](https://circleci.com/gh/cyber-dojo/exercises-start-points.svg?style=svg)](https://circleci.com/gh/cyber-dojo/exercises-start-points)
 
 Specifies the start-points used to create the exercises start-points image
 * [cyberdojo/exercises-start-points](https://hub.docker.com/r/cyberdojo/exercises-start-points)
