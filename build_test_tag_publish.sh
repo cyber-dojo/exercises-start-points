@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-readonly TMP_DIR=$(mktemp -d /tmp/cyber.custom-start-points.XXXXXXXXX)
+readonly TMP_DIR=$(mktemp -d /tmp/cyber-dojo.exercises-start-points.XXXXXXXXX)
 trap "rm -rf ${TMP_DIR} > /dev/null" INT EXIT
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 readonly IMAGE=cyberdojo/exercises-start-points
