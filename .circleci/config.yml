@@ -10,27 +10,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build image
-          command: |
-            set -e
-            ./pipe_build_up_test.sh
-      - run:
-          name: Tag docker image
-          command: |
-            set -e
-            declare -r NAME="${CIRCLE_PROJECT_REPONAME}"
-            declare -r SHA="${CIRCLE_SHA1}"
-            docker tag cyberdojo/${NAME}:latest cyberdojo/${NAME}:${SHA:0:7}
-      - run:
-          name: Publish tagged docker image on dockerhub
-          command: |
-            set -e
-            declare -r NAME="${CIRCLE_PROJECT_REPONAME}"
-            declare -r SHA="${CIRCLE_SHA1}"
-            echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
-            docker push cyberdojo/${NAME}:${SHA:0:7}
-            docker push cyberdojo/${NAME}:latest
-            docker logout
+          name: Build image, test it, tag it, publish it
+          command: ./build_test_tag_publish.sh
 
   deploy-to-beta:
     docker:
@@ -38,27 +19,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Authenticate with gcloud and deploy with helm
-          command: |
-            set -e
-            echo $GCP_K8S_CREDENTIALS > /gcp/gcp-credentials.json
-            gcloud auth activate-service-account \
-              "$SERVICE_ACCOUNT" \
-              --key-file=/gcp/gcp-credentials.json
-            gcloud container clusters get-credentials \
-              "$CLUSTER" \
-              --zone "$ZONE" \
-              --project "$PROJECT"
-            helm init --client-only
-            helm repo add praqma https://praqma-helm-repo.s3.amazonaws.com/
-            helm upgrade \
-              --install \
-              --namespace=beta \
-              --set-string containers[0].tag=${CIRCLE_SHA1:0:7} \
-              --values .circleci/exercises-start-points-values.yaml \
-              beta-exercises-start-points \
-              praqma/cyber-dojo-service \
-              --version 0.2.4
+          name: Authenticate with gcloud, deploy to beta with helm
+          command: ./.circleci/deploy_to_namespace.sh beta
 
   deploy-to-prod:
     docker:
@@ -66,27 +28,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Authenticate with gcloud and deploy with helm
-          command: |
-            set -e
-            echo $GCP_K8S_CREDENTIALS > /gcp/gcp-credentials.json
-            gcloud auth activate-service-account \
-              "$SERVICE_ACCOUNT" \
-              --key-file=/gcp/gcp-credentials.json
-            gcloud container clusters get-credentials \
-              "$CLUSTER" \
-              --zone "$ZONE" \
-              --project "$PROJECT"
-            helm init --client-only
-            helm repo add praqma https://praqma-helm-repo.s3.amazonaws.com/
-            helm upgrade \
-              --install \
-              --namespace=prod \
-              --set-string containers[0].tag=${CIRCLE_SHA1:0:7} \
-              --values .circleci/exercises-start-points-values.yaml \
-              prod-exercises-start-points \
-              praqma/cyber-dojo-service \
-              --version 0.2.4
+          name: Authenticate with gcloud, deploy to prod with helm
+          command: ./.circleci/deploy_to_namespace.sh prod
 
 workflows:
   version: 2
@@ -96,17 +39,13 @@ workflows:
           context: cyberdojo-context
           filters:
             branches:
-              only:
-                  - master
+              only: [ master ]
       - deploy-to-beta:
           context: cyberdojo-context
-          requires:
-            - build-image
+          requires: [ build-image ]
       - approve-to-prod:
           type: approval
-          requires:
-            - deploy-to-beta
+          requires: [ deploy-to-beta ]
       - deploy-to-prod:
           context: cyberdojo-context
-          requires:
-            - approve-to-prod
+          requires: [ approve-to-prod ]
