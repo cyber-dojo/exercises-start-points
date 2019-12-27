@@ -28,7 +28,7 @@ curl_script()
   local -r repo=commander
   local -r branch=master
   local -r url="${raw_github_org}/${repo}/${branch}/$(script_name)"
-  curl -O --silent --fail "${URL}"
+  curl -O --silent --fail "${url}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
