@@ -12,32 +12,31 @@ readonly TAG="${SHA:0:7}"
 build_the_image()
 {
   if on_ci; then
-    build_image_on_ci
-  else
-    build_image_locally
+    cd "${TMP_DIR}"
+    curl_script
+    chmod 700 $(script_path)
   fi
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-build_image_on_ci()
-{
-  cd ${TMP_DIR}
-  curl_script
-  chmod 700 ./$(script_name)
-  ./$(script_name) start-point create \
-    ${IMAGE} \
-      --exercises \
-        https://github.com/cyber-dojo/exercises-start-points.git
+  $(script_path) start-point create "${IMAGE}" --exercises "${ROOT_DIR}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 curl_script()
 {
-  local -r GITHUB_ORG=https://raw.githubusercontent.com/cyber-dojo
+  local -r RAW_GITHUB_ORG=https://raw.githubusercontent.com/cyber-dojo
   local -r REPO=commander
   local -r BRANCH=master
-  local -r URL="${GITHUB_ORG}/${REPO}/${BRANCH}/$(script_name)"
-  curl -O --silent --fail ${URL}
+  local -r URL="${RAW_GITHUB_ORG}/${REPO}/${BRANCH}/$(script_name)"
+  curl -O --silent --fail "${URL}"
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - -
+script_path()
+{
+  if on_ci; then
+    echo "./$(script_name)"
+  else
+    echo "${ROOT_DIR}/../commander/$(script_name)"
+  fi
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -47,19 +46,9 @@ script_name()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-build_image_locally()
-{
-  local -r SCRIPT_NAME="${ROOT_DIR}/../commander/$(script_name)"
-  ${SCRIPT_NAME} start-point create \
-    ${IMAGE} \
-      --exercises \
-        "${ROOT_DIR}"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
 tag_the_image()
 {
-  docker tag ${IMAGE}:latest ${IMAGE}:${TAG}
+  docker tag "${IMAGE}:latest" "${IMAGE}:${TAG}"
   echo "${SHA}"
   echo "${TAG}"
 }
@@ -80,8 +69,8 @@ on_ci_publish_tagged_images()
   echo 'on CI so publishing tagged images'
   # DOCKER_USER, DOCKER_PASS are in ci context
   echo "${DOCKER_PASS}" | docker login --username "${DOCKER_USER}" --password-stdin
-  docker push ${IMAGE}:latest
-  docker push ${IMAGE}:${TAG}
+  docker push "${IMAGE}:latest"
+  docker push "${IMAGE}:${TAG}"
   docker logout
 }
 
