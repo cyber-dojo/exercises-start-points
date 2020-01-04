@@ -1,5 +1,4 @@
-#!/bin/bash
-set -e
+#!/bin/bash -Eeu
 
 readonly NAMESPACE="${1}" # beta | prod
 
