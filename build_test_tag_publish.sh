@@ -25,7 +25,7 @@ build_the_image()
     chmod 700 $(script_path)
   fi
   export GIT_COMMIT_SHA="$(git_commit_sha)"
-  $(script_path) start-point create "$(image_name)" --exercises "${ROOT_DIR}"
+  $(cyber_dojo) start-point create "$(image_name)" --exercises "${ROOT_DIR}"
   unset GIT_COMMIT_SHA
 }
 
@@ -55,29 +55,20 @@ image_sha()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-curl_script()
+cyber_dojo()
 {
-  local -r raw_github_org=https://raw.githubusercontent.com/cyber-dojo
-  local -r repo=commander
-  local -r branch=master
-  local -r url="${raw_github_org}/${repo}/${branch}/$(script_name)"
-  curl -O --silent --fail "${url}"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-script_path()
-{
-  if on_ci; then
-    echo "./$(script_name)"
+  local -r name=cyber-dojo
+  if [ -x "$(command -v ${name})" ]; then
+    >&2 echo "Found executable ${name} on the PATH"
+    echo "${name}"
   else
-    echo "${ROOT_DIR}/../commander/$(script_name)"
+    local -r url="https://raw.githubusercontent.com/cyber-dojo/commander/master/${name}"
+    >&2 echo "Did not find executable ${name} on the PATH"
+    >&2 echo "Curling it from ${url}"
+    curl --fail --output "${TMP_DIR}/${name}" --silent "${url}"
+    chmod 700 "${TMP_DIR}/${name}"
+    echo "${TMP_DIR}/${name}"
   fi
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-script_name()
-{
-  echo cyber-dojo
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
