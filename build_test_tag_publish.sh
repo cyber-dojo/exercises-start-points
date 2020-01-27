@@ -19,11 +19,6 @@ git_commit_sha()
 # - - - - - - - - - - - - - - - - - - - - - - - -
 build_the_image()
 {
-  if on_ci; then
-    cd "${TMP_DIR}"
-    curl_script
-    chmod 700 $(script_path)
-  fi
   export GIT_COMMIT_SHA="$(git_commit_sha)"
   $(cyber_dojo) start-point create "$(image_name)" --exercises "${ROOT_DIR}"
   unset GIT_COMMIT_SHA
