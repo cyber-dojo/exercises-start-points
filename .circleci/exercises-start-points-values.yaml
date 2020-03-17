@@ -4,10 +4,8 @@ fullnameOverride: "exercises-start-points"
 replicaCount: 3
 
 service:
-  port: 4525
   annotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "4525"
 
 volumes:
   - name: exercises-start-points-tmp-dir
@@ -21,7 +19,6 @@ podSecurityContext:
 
 containers:
   - name: exercises-start-points
-    image: cyberdojo/exercises-start-points
     securityContext:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
@@ -38,10 +35,8 @@ containers:
         memory: 64Mi
     livenessProbe:
       path: /alive?
-      port: 4525
     readinessProbe:
       path: /ready?
-      port: 4525
 
 envFromSecret: {}
 
