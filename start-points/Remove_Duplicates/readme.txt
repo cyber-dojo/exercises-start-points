@@ -1,5 +1,4 @@
-Define a function RemoveDuplicate(nlist) to
-remove duplicate elements from list.
+Define a function RemoveDuplicate(nlist) to remove duplicate elements from list.
 
 Here are some examples:
 

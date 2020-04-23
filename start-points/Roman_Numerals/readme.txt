@@ -1,25 +1,46 @@
-Given a positive integer number (eg 42) determine
-its Roman numeral representation as a String (eg "XLII").
+Given a positive integer number (eg 42) determine its Roman numeral representation as a String (eg "XLII").
 
-You cannot write numerals like IM for 999.
-Wikipedia states "Modern Roman numerals are written by
-expressing each arabic digit separately, starting with the
-leftmost digit, and skipping any digit with a value of zero."
+You cannot write numerals like IM for 999. Wikipedia states "Modern Roman numerals are written by expressing each arabic digit separately, starting with the leftmost digit, and skipping any digit with a value of zero."
 For example:
 
-1990 -> "MCMXC"  (1000 -> "M"  + 900 -> "CM" + 90 -> "XC")
+1990 -> "MCMXC" (1000 -> "M"  + 900 -> "CM" + 90 -> "XC")
 2008 -> "MMVIII" (2000 -> "MM" + 8 -> "VIII")
-  99 -> "XCIX"   (90 -> "XC" + 9 -> "IX")
-  47 -> "XLVII"  (40 -> "XL" + 7 -> "VII")
+99 -> "XCIX" (90 -> "XC" + 9 -> "IX")
+47 -> "XLVII" (40 -> "XL" + 7 -> "VII")
 
 The 'digits' are as follows:
 
-1 ->    "I" | 10 ->    "X" | 100 ->    "C" | 1000 ->    "M"
-2 ->   "II" | 20 ->   "XX" | 200 ->   "CC" | 2000 ->   "MM"
-3 ->  "III" | 30 ->  "XXX" | 300 ->  "CCC" | 3000 ->  "MMM"
-4 ->   "IV" | 40 ->   "XL" | 400 ->   "CD" | 4000 -> "MMMM"
-5 ->    "V" | 50 ->    "L" | 500 ->    "D" |
-6 ->   "VI" | 60 ->   "LX" | 600 ->   "DC" |
-7 ->  "VII" | 70 ->  "LXX" | 700 ->  "DCC" |
-8 -> "VIII" | 80 -> "LXXX" | 800 -> "DCCC" |
-9 ->   "IX" | 90 ->   "XC" | 900 ->   "CM" |
+"I" -> 1
+"II" -> 2
+"III" -> 3
+"IV" -> 4
+"V" -> 5
+"VI" -> 6
+"VII" -> 7
+"VIII" -> 8
+"IX" -> 9
+
+"X" -> 10
+"XX" -> 20
+"XXX" -> 30
+"XL" -> 40
+"L" -> 50
+"LX" -> 60
+"LXX" -> 70
+"LXXX" -> 80
+"XC" -> 90
+
+"C" -> 100
+"CC" -> 200
+"CCC" -> 300
+"CD" -> 400
+"D" -> 500
+"DC" -> 600
+"DCC" -> 700
+"DCCC" -> 800
+"CM" -> 900
+
+"M" -> 1000
+"MM" -> 2000
+"MMM" -> 3000
+"MMMM" -> 4000

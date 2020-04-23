@@ -1,7 +1,7 @@
 
 This puzzle comes from Lewis Carroll.
-The magic part is when the values on a square are arranged
-so that adding them up in any direction results in a constant sum.
+
+The magic part is when the values on a square are arranged so that adding them up in any direction results in a constant sum.
 
 You have the following values:
 
@@ -16,9 +16,8 @@ You have the following values:
 5.0
 
 You need to arrange them in a 3 x 3 matrix so that:
-
-The sums of numbers in each row = magic number
-The sums of numbers in each column = magic number
-The sums of numbers in each diagonal = magic number
+  o) The sums of numbers in each row = magic number
+  o) The sums of numbers in each column = magic number
+  o) The sums of numbers in each diagonal = magic number
 
 Source: https://github.com/gigasquid/wonderland-clojure-katas
