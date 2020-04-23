@@ -2,12 +2,12 @@
 
 readonly TMP_DIR=$(mktemp -d /tmp/cyber-dojo.exercises-start-points.XXXXXXXXX)
 trap "rm -rf ${TMP_DIR} > /dev/null" INT EXIT
-readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && pwd )"
+readonly ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 versioner_env_vars()
 {
-  docker run --rm cyberdojo/versioner:latest sh -c 'cat /app/.env'
+  docker run --rm cyberdojo/versioner:latest
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
