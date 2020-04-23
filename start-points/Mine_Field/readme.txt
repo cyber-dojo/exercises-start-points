@@ -1,6 +1,6 @@
 A field of N x M squares is represented by N lines of exactly M characters each.
-  The character '*' represents a mine.
-  The character '.' represents no-mine.
+  o) The character '*' represents a mine.
+  o) The character '.' represents no-mine.
 
 Example input (a 3 x 4 mine-field of 12 squares, 2 of which are mines)
 
