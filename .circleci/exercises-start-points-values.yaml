@@ -4,8 +4,10 @@ fullnameOverride: "exercises-start-points"
 replicaCount: 3
 
 service:
+  port: 4525
   annotations:
     prometheus.io/scrape: "true"
+    prometheus.io/port: "4525"
 
 volumes:
   - name: exercises-start-points-tmp-dir
@@ -35,8 +37,10 @@ containers:
         memory: 64Mi
     livenessProbe:
       path: /alive?
+      port: 4525
     readinessProbe:
       path: /ready?
+      port: 4525      
 
 envFromSecret: {}
 
