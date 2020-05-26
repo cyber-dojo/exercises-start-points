@@ -1,7 +1,7 @@
 
 fullnameOverride: "exercises-start-points"
 
-replicaCount: 3
+replicaCount: 1
 
 service:
   port: 4525
@@ -40,7 +40,7 @@ containers:
       port: 4525
     readinessProbe:
       path: /ready?
-      port: 4525      
+      port: 4525
 
 envFromSecret: {}
 
