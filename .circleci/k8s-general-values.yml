@@ -28,10 +28,9 @@ containers:
         readOnly: false
     resources:
       requests:
-        cpu: 10m
+        cpu: 20m
         memory: 32Mi
       limits:
-        cpu: 40m
         memory: 64Mi
     livenessProbe:
       path: /alive?
