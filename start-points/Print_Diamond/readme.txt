@@ -25,5 +25,5 @@ This is the print diamond for 'A'.
 
 A
 
-Note: These examplesIt use dots in place of spaces only for readability.
+Note: These examples use dots in place of spaces only for readability.
 Your diamond must contain spaces where there are dots.
