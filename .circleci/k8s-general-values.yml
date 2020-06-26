@@ -12,10 +12,10 @@ volumes:
     emptyDir:
       medium: Memory
       sizeLimit: "16Mi"
-
-podSecurityContext:
-  runAsUser: 65534 # nobody
-  fsGroup: 65534 # nobody
+  - name: docker-socket
+    hostPath:
+      path: /var/run/docker.sock
+      type: File
 
 containers:
   - name: exercises-start-points
@@ -26,6 +26,8 @@ containers:
       - name: exercises-start-points-tmp-dir
         mountPath: /tmp
         readOnly: false
+      - mountPath: /var/run/docker.sock
+        name: docker-socket
     resources:
       requests:
         cpu: 20m
