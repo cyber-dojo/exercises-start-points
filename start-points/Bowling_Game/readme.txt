@@ -1,7 +1,7 @@
 Write a program to score a game of Ten-Pin Bowling.
 
 Input: string (described below) representing a bowling game
-Ouput: integer score
+Output: integer score
 
 The scoring rules:
 
