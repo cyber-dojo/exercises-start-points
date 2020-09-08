@@ -22,6 +22,8 @@ containers:
     securityContext:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
+    env:
+      CYBER_DOJO_PROMETHEUS: "true"                  
     volumeMounts:
       - name: exercises-start-points-tmp-dir
         mountPath: /tmp
