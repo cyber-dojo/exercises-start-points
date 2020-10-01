@@ -1,6 +1,6 @@
 Given a sequence of characters your task is to reorder them as follows:
 
-1) Move a range of elements from one position to another, preserving their order and the order of the other elements.
+Move a range of elements from one position to another, preserving their order and the order of the other elements.
 
    e.g. Given the sequence
    { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' }
