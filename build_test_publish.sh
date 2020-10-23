@@ -22,7 +22,7 @@ versioner_env_vars()
   # This function echoes env-vars which are exported and so become
   # available to the rest of the script. Start with the default env-vars...
   docker run --rm cyberdojo/versioner:latest
-  # ... and then override the env-vars for custom-start-points
+  # ... and then override the env-vars for exercises-start-points
   local -r sha="$(cd "${ROOT_DIR}" && git rev-parse HEAD)"
   local -r tag="${sha:0:7}"
   echo "CYBER_DOJO_EXERCISES_START_POINTS_SHA=${sha}"
