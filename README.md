@@ -3,9 +3,7 @@
 
 - The source for the [https://cyber-dojo.org/creator/choose_problem?type=group](https://cyber-dojo.org/creator/choose_problem?type=group) page.
 
-![cyber-dojo.org exercises-start-points page](https://github.com/cyber-dojo/exercises-start-points/blob/master/docs/screen_shot.png)
-
-<img width="50%" src="https://user-images.githubusercontent.com/252118/97069462-8beade80-15c8-11eb-8f04-5f6d067c51d1.png">
+<img width="75%" src="https://user-images.githubusercontent.com/252118/97069462-8beade80-15c8-11eb-8f04-5f6d067c51d1.png">
 
 - To contribute a new problem:
   - Clone this repo.
