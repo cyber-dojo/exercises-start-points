@@ -21,7 +21,7 @@ Eg
    "Diamond_Spec.feature" => "Diamond" is selected.
    "fizz.buzz-tests.js" => "fizz.buzz" is selected.
 
-Thirdly, if the filename is in a dir/
+Third, if the filename is in a dir/
 it assumes you will also want to keep that.
 Eg
 
