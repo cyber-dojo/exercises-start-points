@@ -6,21 +6,24 @@ Your task is to write a function that is given a string filename
 and which returns a pair of integers specifying the start and
 end indexes (into the filename) of the selected range.
 
-First, it assumes you will want to keep the extension. Eg
+First, it assumes you will want to keep the extension.
+Eg
 
    "hiker.cpp" ==> "hiker" is selected.
    "diamond.h" ==> "diamond" is selected.
 
-Second, if the filename includes the word "tests", "test", "spec", or "step"
-(case insensitive) it assumes you will want to keep those too, together
-with any 'separator' characters (such as dot, underscore, hyphen). Eg
+Second, if the filename includes the word "tests", "test", "spec", or
+"step" (case insensitive) it assumes you will want to keep those too,
+together with any 'separator' characters (dot, underscore, hyphen).
+Eg
 
    "HikerTest.js"  ==> "Hiker" is selected.
    "Diamond_Spec.feature" => "Diamond" is selected.
    "fizz.buzz-tests.js" => "fizz.buzz" is selected.
 
 Thirdly, if the filename is in a dir/
-it assumes you will also want to keep that. Eg
+it assumes you will also want to keep that.
+Eg
 
    "test/FizzBuzz_test.exs" => "FizzBuzz" is selected.
    "src/test/Roman.spec.re" => "Roman" is selected.
