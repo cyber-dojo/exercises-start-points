@@ -1,12 +1,62 @@
 
-When showing the diff for a traffic-light, cyber-dojo
-has a function to select one of the files.
+When reviewing a traffic-light, cyber-dojo uses a
+function to select one of the files.
+
+Your task is to write this selection function.
 
 The function has two parameters:
-  o) the string filename selected from the previous traffic-light
-  o) an array of diff data, one diff per file.
+  o) previous-filename; a string
+     the filename of the previously viewed traffic-light
+  o) diffs; an array
+     diff data, one per file.
 
-The function returns the index of the selected diff in the array.
+The function returns the index of the selected diff
+(in diffs) according to the following cascading rules:
+
+Rule 1:
+If any diff is for a changed, previous-filename,
+select it.
+
+Rule 2:
+If any diff is for a changed, non .txt file,
+select one with the (possibly equal) largest change-count.
+
+Rule 3:
+If any diff is for an identically renamed, non .txt file,
+select one with the (possibly equal) largest same-count.
+
+Rule 4:
+If any diff is for an empty, created, non .txt file,
+select one.
+
+Rule 5:
+If any diff is for an empty, deleted, non .txt file,
+select one.
+
+Rule 6:
+If any diff is for a changed, .txt file,
+select one with the (possibly equal) largest change-count.
+
+Rule 7:
+If any diff is for an identically renamed, .txt file,
+select one with the (possibly equal) largest same-count.
+
+Rule 8:
+If any diff is for the (unchanged) previous-filename,
+select it.
+
+Rule 9:
+Select the diff whose filename is 'cyber-dojo.sh'
+
+
+Note:
+o) 'changed' means 'change-count' is greater than zero.
+
+o) 'change-count' means the sum of the
+   added line-count and the deleted line-count.
+
+o) a diff for 'cyber-dojo.sh' will always exist.
+
 
 The diff data for each file is in JSON format.
 For example:
@@ -19,13 +69,13 @@ For example:
     }
   }
 
-The meaning of the four data fields is as follows:
+o) "type" is a string
 
-1) "type" is a string
    One of ["deleted","created","renamed","unchanged","changed"]
 
-2) "old_filename" is a string
-3) "new_filename" is a string
+o) "old_filename" is a string
+o) "new_filename" is a string
+
    if "type" is "deleted"
      "old_filename" will be the filename
      "new_filename" will be null
@@ -44,23 +94,26 @@ The meaning of the four data fields is as follows:
       "new_filename" will be the (same) filename
       (the file's content has changed, but not its name)
 
-4) "line_counts"
+o) "line_counts"
+
    if "type" is "deleted"
-     "deleted" was the number of lines in the deleted file
      "added" is zero
      "same" is zero
+     "deleted" was the number of lines in the deleted file
+       (zero if the deleted file was empty)
 
    if "type" is "created"
-     "added" is the number of lines in the created file
      "deleted" is zero
      "same" is zero
+     "added" is the number of lines in the created file
+       (zero if the created file was empty)
 
    if "type" is "renamed"
      "added" is the number of added lines
      "deleted" is the number of deleted lines
      "same" is the number of unchanged lines
-      ("added" and "deleted" will both be zero
-       for an *identical* rename)
+       (for an identical rename, "added" and "deleted"
+        will both be zero)
 
    if "type" is "unchanged"
      "added" is zero
@@ -71,36 +124,4 @@ The meaning of the four data fields is as follows:
      "added" is the number of added lines
      "deleted" is the number of deleted lines
      "same" is the number of unchanged lines.
-      
-The function implements these five cascading rules:
-
-Rule 1:
-If the previous-filename exists in the array
-and has changed content, select it. Note this
-rule can select both deleted and created files.
-
-Rule 2:
-If any of the diffs in the array has changed
-content, select the one with the largest change,
-where largest means the total of the added line-count
-and the deleted line-count.
-
-Rule 3:
-If any of the diffs in the array is for an identical
-rename, select the one with the largest content,
-where largest means the same line-count.
-
-Rule 4:
-If the previous-filename exists in the array
-(but has not changed its name nor its content)
-select it.
-
-Rule 5:
-Select the diff whose filename is 'cyber-dojo.sh'
-This will always be present in the array.
-
-Note: 'changed content' means the added line-count
-is greater than zero or the deleted line-count is
-greater than zero (or both).
-
-Your task is to implement this selection function.
+       ("added" or "deleted" or both will be non-zero)
