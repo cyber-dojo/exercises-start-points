@@ -167,8 +167,8 @@ show_env_vars()
 {
   # If you doing local development, your versioner_env_vars() function
   # (in dependent repos), will need to add these overrides.
-  echo "CYBER_DOJO_EXERCISES_START_POINTS_SHA=$(image_sha)"
-  echo "CYBER_DOJO_EXERCISES_START_POINTS_TAG=$(image_tag)"
+  echo "echo CYBER_DOJO_EXERCISES_START_POINTS_SHA=$(image_sha)"
+  echo "echo CYBER_DOJO_EXERCISES_START_POINTS_TAG=$(image_tag)"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
