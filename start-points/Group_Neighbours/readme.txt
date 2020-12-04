@@ -5,7 +5,7 @@ the files from any active avatar in the group!
 The [<] button moves you to the previous avatar.
 The [>] button moves you to the next avatar.
 
-The previous/next orderings is based on the
+The previous/next ordering is based on the
 avatar's indexes, which have a range of [0..64)
  0==alligator
  1==antelope
@@ -30,6 +30,8 @@ The function must return three pieces of data:
   o) the id of the previous avatar
   o) the avatar-index matching the id (1st arg)
   o) the id of the next avatar
+
+0) The keys of the Hash are Strings not Integers.
 
 1) The Hash always contains an entry whose id matches the 1st arg.
 
