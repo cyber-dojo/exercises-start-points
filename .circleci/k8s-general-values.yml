@@ -40,6 +40,10 @@ containers:
       limits:
         memory: 64Mi
     livenessProbe:
-      path: /alive?
+      path: /alive
     readinessProbe:
-      path: /ready?
+      path: /ready
+    env:
+      CYBER_DOJO_PROMETHEUS: "true"
+      CYBER_DOJO_EXERCISES_START_POINTS_PORT: "4525"
+      # CYBER_DOJO_K8S_PORT: "19661"
