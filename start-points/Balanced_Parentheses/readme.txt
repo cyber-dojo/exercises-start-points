@@ -1,5 +1,5 @@
 
-Write a program to determine if the the parentheses (), the brackets [], and the braces {}, in a string are balanced.
+Write a program to determine if the parentheses (), the brackets [], and the braces {}, in a string are balanced.
 
 For example:
 
