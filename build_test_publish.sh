@@ -104,7 +104,7 @@ remove_all_but_latest_images()
 build_tagged_image()
 {
   # GIT_COMMIT_SHA is needed to embed the SHA inside the created image as an env-var
-  export GIT_COMMIT_SHA="$(git_commit_tag)"
+  export GIT_COMMIT_SHA="$(git_commit_sha)"
   $(cyber_dojo) start-point create "$(image_name):$(git_commit_tag)" --exercises "${GIT_REPO_DIR}"
   unset GIT_COMMIT_SHA
 }
