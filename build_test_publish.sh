@@ -20,7 +20,6 @@ build_test_publish()
   assert_sha_env_var_inside_image_matches_image_tag
   echo; show_env_vars
   tag_the_image_to_latest
-  echo; on_ci_publish_tagged_images
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - -
@@ -105,8 +104,8 @@ remove_all_but_latest_images()
 build_tagged_image()
 {
   # GIT_COMMIT_SHA is needed to embed the SHA inside the created image as an env-var
-  export GIT_COMMIT_SHA="$(image_sha)"
-  $(cyber_dojo) start-point create "$(image_name):$(image_tag)" --exercises "${GIT_REPO_DIR}"
+  export GIT_COMMIT_SHA="$(git_commit_tag)"
+  $(cyber_dojo) start-point create "$(image_name):$(git_commit_tag)" --exercises "${GIT_REPO_DIR}"
   unset GIT_COMMIT_SHA
 }
 
@@ -114,7 +113,7 @@ build_tagged_image()
 assert_sha_env_var_inside_image_matches_image_tag()
 {
   local -r expected="$(image_sha)"
-  local -r actual="$(docker run --entrypoint='' --rm "$(image_name):$(image_tag)" sh -c 'echo ${SHA}')"
+  local -r actual="$(git_commit_sha)"
   if [ "${expected}" != "${actual}" ]; then
     echo ERROR
     echo "expected:'${expected}'"
@@ -145,7 +144,7 @@ tag_the_image_to_latest()
 {
   # Creating a versioner release relies on :latest holding the SHA
   # env-var which identifies the 7-character image tag.
-  docker tag "$(image_name):$(image_tag)" "$(image_name):latest"
+  docker tag "$(image_name):$(git_commit_tag)" "$(image_name):latest"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -153,27 +152,14 @@ show_env_vars()
 {
   # If you doing local development, your versioner_env_vars() function
   # (in dependent repos), will need to add these overrides.
-  echo "echo CYBER_DOJO_EXERCISES_START_POINTS_SHA=$(image_sha)"
-  echo "echo CYBER_DOJO_EXERCISES_START_POINTS_TAG=$(image_tag)"
+  echo "echo CYBER_DOJO_EXERCISES_START_POINTS_SHA=$(git_commit_sha)"
+  echo "echo CYBER_DOJO_EXERCISES_START_POINTS_TAG=$(git_commit_tag)"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 on_ci()
 {
   [ -n "${CIRCLECI:-}" ]
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-on_ci_publish_tagged_images()
-{
-  if ! on_ci; then
-    echo 'not on CI so not publishing tagged images'
-    return
-  fi
-  echo 'on CI so publishing tagged images'
-  # Docker login/logout is done in the .circleci/config.yml file
-  docker push "$(image_name):$(image_tag)"
-  docker push "$(image_name):latest"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -

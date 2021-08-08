@@ -31,13 +31,6 @@ image_name()
 # - - - - - - - - - - - - - - - - - - - - - - - -
 image_sha()
 {
-  docker run --rm $(image_name) sh -c 'echo ${SHA}'
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-image_tag()
-{
-  local -r sha="$(image_sha)"
-  echo "${sha:0:7}"
+  docker run --entrypoint='' --rm "$(image_name):$(image_tag)" sh -c 'echo ${SHA}'
 }
 
