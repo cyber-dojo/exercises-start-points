@@ -1,7 +1,7 @@
 {
     "owner": "cyber-dojo",
     "name": "exercises-start-points",
-    "description": "Microservice for Exercises choices",
+    "description": "Exercises choices",
     "visibility": "public",
     "template": [
         "artifact"
