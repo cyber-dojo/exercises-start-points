@@ -20,7 +20,7 @@ volumes:
   - name: docker-socket
     hostPath:
       path: /var/run/docker.sock
-      type: File
+      type: ""
 
 containers:
   - name: exercises-start-points
