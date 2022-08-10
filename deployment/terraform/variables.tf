@@ -1,5 +1,5 @@
 variable "service_name" {
-  type = string
+  type    = string
   default = "exercises-start-points"
 }
 
@@ -8,22 +8,22 @@ variable "env" {
 }
 
 variable "app_port" {
-  type = number
+  type    = number
   default = 4525
 }
 
 variable "cpu_limit" {
-  type = number
+  type    = number
   default = 20
 }
 
 variable "mem_limit" {
-  type = number
+  type    = number
   default = 64
 }
 
 variable "mem_reservation" {
-  type = number
+  type    = number
   default = 32
 }
 
