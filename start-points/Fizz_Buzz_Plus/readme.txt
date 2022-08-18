@@ -6,4 +6,4 @@ numbers that are exact multiples of 3, or that contain 3, must print a string co
 
 numbers that are exact multiples of 5, or that contain 5, must print a string containing "Buzz"
    For example 10 -> "...Buzz..."
-   For example 51 -> "...Buzz..."
+   For example 52 -> "...Buzz..."
