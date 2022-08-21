@@ -6,7 +6,7 @@ readonly TMP_DIR=$(mktemp -d /tmp/cyber-dojo.exercises-start-points.XXXXXXXXX)
 trap "rm -rf ${TMP_DIR} > /dev/null" INT EXIT
 source "${SH_DIR}/echo_versioner_env_vars.sh"
 export $(echo_versioner_env_vars)
-source "${SH_DIR}/merkely.sh"
+source "${SH_DIR}/kosli.sh"
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 build_test_publish()
@@ -158,13 +158,13 @@ show_env_vars()
 # - - - - - - - - - - - - - - - - - - - - - - - -
 on_ci()
 {
-  [ -n "${CIRCLECI:-}" ]
+  [ -n "${CI:-}" ]
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 if on_ci; then
-  merkely_declare_pipeline https://staging.app.merkely.com
-  merkely_declare_pipeline https://app.merkely.com
+  kosli_declare_pipeline https://staging.app.kosli.com
+  kosli_declare_pipeline https://app.kosli.com
 fi
 
 build_test_publish
@@ -172,7 +172,7 @@ build_test_publish
 if on_ci; then
   docker push "$(image_name):latest"
   docker push "$(image_name):$(git_commit_tag)"
-  merkely_log_artifact https://staging.app.merkely.com
-  merkely_log_artifact https://app.merkely.com
+  kosli_log_artifact https://staging.app.kosli.com
+  kosli_log_artifact https://app.kosli.com
 fi
 
