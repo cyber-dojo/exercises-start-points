@@ -15,9 +15,6 @@ kosli_fingerprint()
 # - - - - - - - - - - - - - - - - - - -
 kosli_log_deployment()
 {
-  local -r ENVIRONMENT="${1}"
-  local -r HOSTNAME="${2}"
-
 	docker run \
       --env MERKELY_COMMAND=log_deployment \
       --env MERKELY_OWNER=${MERKELY_OWNER} \
@@ -27,7 +24,7 @@ kosli_log_deployment()
       --env MERKELY_ENVIRONMENT="${MERKELY_ENVIRONMENT}" \
       --env MERKELY_CI_BUILD_URL=${CIRCLE_BUILD_URL} \
       --env MERKELY_API_TOKEN=${MERKELY_API_TOKEN} \
-      --env MERKELY_HOST="${HOSTNAME}" \
+      --env MERKELY_HOST="${MERKELY_HOST}" \
       --rm \
       --volume /var/run/docker.sock:/var/run/docker.sock \
     	    ${MERKELY_CHANGE}
