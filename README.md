@@ -1,4 +1,4 @@
-![Github Action (main)](https://github.com/cyber-dojo/exercises-start-points/actions/workflows/main.yml/badge.svg)
+[![Github Action (main)](https://github.com/cyber-dojo/exercises-start-points/actions/workflows/main.yml/badge.svg)](https://github.com/cyber-dojo/exercises-start-points/actions)
 
 - A docker-containerized micro-service for [https://cyber-dojo.org](http://cyber-dojo.org).
 - The data source for the `choose a problem` page.
