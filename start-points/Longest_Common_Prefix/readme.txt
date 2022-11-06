@@ -17,7 +17,9 @@ Variation 2.
 Find the longest common prefix across ANY two or more strings in the set.
 For example:
 
-     { "new", "next" } ==> "ne"
+     { "pond", "newest" } ==> ""
+
+     { "new", "night" } ==> "n"
      
      { "newest", "new", "newly" } ==> "new"
      
