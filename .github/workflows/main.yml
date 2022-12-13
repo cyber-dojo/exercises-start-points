@@ -30,7 +30,7 @@ jobs:
       DOCKER_USER: ${{ secrets.DOCKER_USER }}
     with:
       BUILD_COMMAND: build_test_publish.sh
-      tag: ${{ needs.pre-build.outputs.tag }}
+      image_tag: ${{ needs.pre-build.outputs.image_tag }}
       AWS_ACCOUNT_ID: 244531986313
       AWS_REGION: eu-central-1
       ecr_registry: 244531986313.dkr.ecr.eu-central-1.amazonaws.com
