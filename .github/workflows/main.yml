@@ -9,7 +9,7 @@ jobs:
   pre-build:
     runs-on: ubuntu-20.04
     outputs:
-      tag: ${{ steps.prep.outputs.tag }}
+      image_tag: ${{ steps.prep.outputs.image_tag }}
     steps:
 
     - uses: actions/checkout@v2
