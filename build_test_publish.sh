@@ -176,3 +176,5 @@ if on_ci; then
   kosli_log_artifact https://app.kosli.com
 fi
 
+# Return non-zero for non-compliant artifact
+on_ci_kosli_assert_artifact
