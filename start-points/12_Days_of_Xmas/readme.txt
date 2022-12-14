@@ -18,7 +18,7 @@ Three french hens
 Two turtle doves and
 A partridge in a pear tree.
 
-On the forth day of Christmas
+On the fourth day of Christmas
 My true love gave to me:
 Four calling birds
 Three french hens
@@ -102,7 +102,7 @@ Three french hens
 Two turtle doves and
 A partridge in a pear tree.
 
-On the Twelfth day of Christmas,
+On the twelfth day of Christmas,
 My true love gave to me:
 Twelve drummers drumming
 Eleven pipers piping
@@ -114,7 +114,7 @@ Six geese a-laying
 Five golden rings
 Four calling birds
 Three french hens
-Two turtle doves
-And a partridge in a pear tree.
+Two turtle doves and
+A partridge in a pear tree.
 
 [Source https://rosettacode.org]
