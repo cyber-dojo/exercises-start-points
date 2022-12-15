@@ -11,9 +11,7 @@ jobs:
     outputs:
       image_tag: ${{ steps.prep.outputs.image_tag }}
     steps:
-
-    - uses: actions/checkout@v2
-
+    - uses: actions/checkout@v3
     - name: Prepare
       id: prep
       run: |
@@ -52,7 +50,7 @@ jobs:
       cyber_dojo_env_name_aws: aws-beta
       kosli_host_staging: https://staging.app.kosli.com
       kosli_host_production: https://app.kosli.com
-      
+
   deploy-prod:
     needs: [pre-build, build-test-push]
     uses: cyber-dojo/reusable-actions-workflows/.github/workflows/kosli_deploy.yml@master
@@ -68,4 +66,3 @@ jobs:
       cyber_dojo_env_name_aws: aws-prod
       kosli_host_staging: https://staging.app.kosli.com
       kosli_host_production: https://app.kosli.com
-      
