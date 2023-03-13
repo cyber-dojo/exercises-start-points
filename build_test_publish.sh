@@ -162,19 +162,7 @@ on_ci()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-if on_ci; then
-  kosli_declare_pipeline https://staging.app.kosli.com
-  kosli_declare_pipeline https://app.kosli.com
-fi
-
+on_ci_kosli_create_flow
 build_test_publish
-
-if on_ci; then
-  docker push "$(image_name):latest"
-  docker push "$(image_name):$(git_commit_tag)"
-  kosli_log_artifact https://staging.app.kosli.com
-  kosli_log_artifact https://app.kosli.com
-fi
-
-# Return non-zero for non-compliant artifact
-on_ci_kosli_assert_artifact
+on_ci_kosli_report_artifact
+on_ci_kosli_assert_artifact # Return non-zero for non-compliant artifact
