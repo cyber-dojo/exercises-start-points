@@ -2,7 +2,7 @@
 
 # ROOT_DIR must be set
 
-export KOSLI_OWNER=cyber-dojo
+export KOSLI_ORG=cyber-dojo
 export KOSLI_FLOW=exercises-start-points
 
 readonly KOSLI_HOST_STAGING=https://staging.app.kosli.com
@@ -25,11 +25,13 @@ kosli_report_artifact()
 {
   local -r hostname="${1}"
 
-  cd "$(root_dir)"
+  pushd "$(root_dir)" > /dev/null
 
   kosli report artifact "$(artifact_name)" \
       --artifact-type docker \
       --host "${hostname}"
+
+  popd > /dev/null
 }
 
 # - - - - - - - - - - - - - - - - - - -
