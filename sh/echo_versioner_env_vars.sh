@@ -34,3 +34,8 @@ image_sha()
   docker run --entrypoint='' --rm "$(image_name):$(git_commit_tag)" sh -c 'echo ${SHA}'
 }
 
+# - - - - - - - - - - - - - - - - - - - - - - - -
+root_dir()
+{
+  git rev-parse --show-toplevel
+}
