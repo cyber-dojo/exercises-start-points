@@ -1,1 +1,15 @@
-# Do not delete this file - it is needed for the snyk_scans repo workflow
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.0
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-GOLANG-GOOGLEGOLANGORGGRPC-5953328:
+    - '*':
+        reason: Waiting for base image upgrade
+        expires: 2023-11-10T21:18:37.719Z
+        created: 2023-10-11T21:18:37.723Z
+  SNYK-GOLANG-GOLANGORGXNETHTTP2-5953327:
+    - '*':
+        reason: Waiting for base image upgrade
+        expires: 2023-11-10T21:18:57.635Z
+        created: 2023-10-11T21:18:57.642Z
+patch: {}
