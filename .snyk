@@ -12,4 +12,9 @@ ignore:
         reason: Waiting for base image upgrade
         expires: 2023-11-10T21:18:57.635Z
         created: 2023-10-11T21:18:57.642Z
+  SNYK-GOLANG-GOOPENTELEMETRYIOCONTRIBINSTRUMENTATIONNETHTTPOTELHTTP-5963583:
+    - '*':
+        reason: 'No fix yet available in docker-in-docker base image'
+        expires: 2023-11-16T07:00:00.000Z
+        created: 2023-10-16T07:20:24.142Z
 patch: {}
