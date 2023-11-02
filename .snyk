@@ -27,4 +27,9 @@ ignore:
         reason: No fix yet available in docker-in-docker base image
         expires: 2023-11-17T11:30:11.187Z
         created: 2023-10-18T11:30:11.205Z
+  SNYK-ALPINE318-OPENSSL-6032386:
+    - '*':
+        reason: Snyk seems not to see base image because there is no Dockerfile?
+        expires: 2023-12-02T09:24:25.174Z
+        created: 2023-11-02T09:24:25.189Z
 patch: {}
