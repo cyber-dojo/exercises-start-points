@@ -10,26 +10,26 @@ ignore:
   SNYK-GOLANG-GOLANGORGXNETHTTP2-5953327:
     - '*':
         reason: Waiting for base image upgrade
-        expires: 2023-12-10T21:18:57.635Z
+        expires: 2023-12-10T21:18:37.719Z
         created: 2023-10-11T21:18:57.642Z
   SNYK-GOLANG-GOOPENTELEMETRYIOCONTRIBINSTRUMENTATIONNETHTTPOTELHTTP-5963583:
     - '*':
         reason: 'No fix yet available in docker-in-docker base image'
-        expires: 2023-12-16T07:00:00.000Z
+        expires: 2023-12-10T21:18:37.719Z
         created: 2023-10-16T07:20:24.142Z
   SNYK-GOLANG-GOOPENTELEMETRYIOCONTRIBINSTRUMENTATIONNETHTTPOTELHTTP-5971109:
     - '*':
         reason: No fix yet available in docker-in-docker base image
-        expires: 2023-11-17T11:29:48.309Z
+        expires: 2023-12-10T21:18:37.719Z
         created: 2023-10-18T11:29:48.324Z
   SNYK-GOLANG-GOOPENTELEMETRYIOCONTRIBINSTRUMENTATIONNETHTTPHTTPTRACEOTELHTTPTRACE-5971114:
     - '*':
         reason: No fix yet available in docker-in-docker base image
-        expires: 2023-11-17T11:30:11.187Z
+        expires: 2023-12-10T21:18:37.719Z
         created: 2023-10-18T11:30:11.205Z
   SNYK-ALPINE318-OPENSSL-6032386:
     - '*':
         reason: Snyk seems not to see base image because there is no Dockerfile?
-        expires: 2023-12-02T09:24:25.174Z
+        expires: 2023-12-10T21:18:37.719Z
         created: 2023-11-02T09:24:25.189Z
 patch: {}
