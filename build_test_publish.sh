@@ -162,8 +162,8 @@ on_ci()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-on_ci_kosli_create_flow
+on_ci_kosli_begin_trail
 build_test_publish
-on_ci_kosli_report_artifact
-on_ci_kosli_report_snyk_scan_evidence
+on_ci_kosli_attest_artifact
+on_ci_kosli_attest_snyk_scan_evidence
 on_ci_kosli_assert_artifact # Return non-zero for non-compliant artifact

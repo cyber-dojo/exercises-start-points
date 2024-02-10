@@ -1,0 +1,8 @@
+version: 1
+
+trail:
+  artifacts:
+    - name: exercises-start-points
+      attestations:
+        - name: snyk-scan
+          type: snyk
