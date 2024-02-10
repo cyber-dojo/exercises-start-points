@@ -2,7 +2,7 @@
 
 - A [docker-containerized](https://registry.hub.docker.com/r/cyberdojo/exercises-start-points) micro-service for [https://cyber-dojo.org](http://cyber-dojo.org).
 - The data source for the `choose a problem` page.
-- A [Kosli](https://www.kosli.com/) showcase for a [CI flow](https://app.kosli.com/cyber-dojo/flows/exercises-start-points-ci/) 
+- A [Kosli](https://www.kosli.com/) showcase for a [CI flow](https://app.kosli.com/cyber-dojo/flows/exercises-start-points-ci/trails/) 
   deploying, with Continuous Compliance, to [staging](https://app.kosli.com/cyber-dojo/environments/aws-beta/snapshots/) and [production](https://app.kosli.com/cyber-dojo/environments/aws-prod/snapshots/) AWS environments.
 - How to [contribute a new problem](docs/contributing.md).
 
