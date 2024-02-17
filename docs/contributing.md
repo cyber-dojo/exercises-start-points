@@ -1,5 +1,5 @@
 
-# How to contribute a new problem
+# How to contribute a new exercise
 
 - Clone this repo.
 - Add the new problem description to the repo, following the existing format.
