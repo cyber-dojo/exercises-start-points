@@ -1,7 +1,8 @@
 
-# Contributing
+# How to contribute a new exercise
 
-:+1::tada: Thanks for thinking about contributing! :tada::+1:
-
-There is a cyber-dojo [Project Board](https://github.com/orgs/cyber-dojo/projects/3/views/1)  
-There is a central [CONTRIBUTING.md](https://github.com/cyber-dojo/cyber-dojo/blob/master/CONTRIBUTING.md)
+- Clone this repo.
+- Add the new problem description to the repo, following the existing format.
+- Run `./build_test_publish.sh` to check all is ok.
+- Issue a pull request.
+- :+1::tada: Thank you. :+1::tada:
