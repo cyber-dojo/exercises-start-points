@@ -116,7 +116,9 @@ on_ci_kosli_attest_snyk_scan_evidence()
   if on_ci; then
     set +e
     snyk container test "$(artifact_name)" \
-      --json-file-output="$(repo_root)/snyk.json" \
+      --file=Dockerfile \
+      --sarif \
+      --sarif-file-output=snyk.json \
       --policy-path="$(repo_root)/.snyk"
     set -e
 
