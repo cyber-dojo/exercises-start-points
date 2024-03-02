@@ -4,5 +4,7 @@ trail:
   artifacts:
     - name: exercises-start-points
       attestations:
-        - name: snyk-scan
+        - name: snyk-container-scan
+          type: snyk
+        - name: snyk-code-scan
           type: snyk
