@@ -156,4 +156,6 @@ show_env_vars()
   echo "echo CYBER_DOJO_EXERCISES_START_POINTS_TAG=$(git_commit_tag)"
 }
 
+exit_non_zero_unless_installed docker
+exit_non_zero_unless_installed git
 build_test_tag
