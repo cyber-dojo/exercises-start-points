@@ -6,12 +6,13 @@ on:
       - main
 
 env:
-  KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}   # False
-  KOSLI_HOST: ${{ vars.KOSLI_HOST_STAGING }} # https://staging.app.kosli.com
-  KOSLI_ORG: ${{ vars.KOSLI_ORG }}           # cyber-dojo
-  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}         # exercises-start-points-ci
+  KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}           # False
+  KOSLI_HOST: ${{ vars.KOSLI_HOST_STAGING }}         # https://staging.app.kosli.com
+  KOSLI_ORG: ${{ vars.KOSLI_ORG }}                   # cyber-dojo
+  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}                 # exercises-start-points-ci
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
   KOSLI_TRAIL: ${{ github.sha }}
+  SERVICE_NAME: ${{ github.event.repository.name }}  # exercises-start-points
 
 jobs:
 
