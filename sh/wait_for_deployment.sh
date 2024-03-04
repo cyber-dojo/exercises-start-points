@@ -54,9 +54,9 @@ image_not_deployed()
 docker pull "${IMAGE_NAME}"
 FINGERPRINT=$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker)
 
-MAX_WAIT_TIME=$((8 * 60))  # max time to wait for image to be deployed
-SLEEP_TIME=15              # wait time between deployment checks
-MAX_ATTEMPTS=$(( MAX_WAIT_TIME / SLEEP_TIME ))
+MAX_WAIT_TIME=15 # max time to wait for image to be deployed, in minutes
+SLEEP_TIME=20    # wait time between deployment checks, in seconds
+MAX_ATTEMPTS=$(( MAX_WAIT_TIME * 60 / SLEEP_TIME ))
 ATTEMPTS=1
 
 until image_deployed
