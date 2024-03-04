@@ -9,7 +9,7 @@ env:
   KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}   # False
   KOSLI_HOST: ${{ vars.KOSLI_HOST_STAGING }} # https://staging.app.kosli.com
   KOSLI_ORG: ${{ vars.KOSLI_ORG }}           # cyber-dojo
-  KOSLI_FLOW: exercises-start-points-ci
+  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}         # exercises-start-points-ci
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
   KOSLI_TRAIL: ${{ github.sha }}
 
@@ -43,29 +43,29 @@ jobs:
         run: |
           IMAGE_TAG=${GITHUB_SHA:0:7}
           echo "image_tag=${IMAGE_TAG}" >> ${GITHUB_OUTPUT}
-          echo "image_name=cyberdojo/exercises-start-points:${IMAGE_TAG}" >> ${GITHUB_OUTPUT}
+          echo "image_name=cyberdojo/${{ env.SERVICE_NAME }}:${IMAGE_TAG}" >> ${GITHUB_OUTPUT}
 
 
-#  pull-request:
-#    needs: [kosli-trail]
-#    runs-on: ubuntu-latest
-#    permissions:
-#      id-token: write
-#      contents: write
-#      pull-requests: read
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - name: Setup Kosli CLI
-#        uses: kosli-dev/setup-cli-action@v2
-#        with:
-#          version: ${{ vars.KOSLI_CLI_VERSION }}
-#
-#      - name: Report pull-request evidence to Kosli Trail
-#        run:
-#          kosli attest pullrequest github
-#            --github-token=${{ secrets.GITHUB_TOKEN }}
-#            --name=exercises-start-points.pull-request
+  pull-request:
+    needs: [kosli-trail]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
+      - name: Report pull-request evidence to Kosli Trail
+        run:
+          kosli attest pullrequest github
+            --github-token=${{ secrets.GITHUB_TOKEN }}
+            --name=exercises-start-points.pull-request
 
 
   wait-for-image:
@@ -176,7 +176,7 @@ jobs:
 
 
   sdlc-control-gate:
-    needs: [snyk-container-scan, snyk-code-scan, kosli-trail, wait-for-image]
+    needs: [pull-request, snyk-container-scan, snyk-code-scan, kosli-trail, wait-for-image]
     runs-on: ubuntu-latest
     steps:
       - name: Setup Kosli CLI
@@ -309,5 +309,5 @@ jobs:
       - name: Tag image to :latest and push to Dockerhub Registry
         run: |
           docker pull "${IMAGE_NAME}"
-          docker tag "${IMAGE_NAME}" cyberdojo/exercises-start-points:latest
-          docker push cyberdojo/exercises-start-points:latest
+          docker tag "${IMAGE_NAME}" cyberdojo/${{ env.SERVICE_NAME }}:latest
+          docker push cyberdojo/${{ env.SERVICE_NAME }}:latest

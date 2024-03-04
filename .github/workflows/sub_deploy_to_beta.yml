@@ -14,12 +14,13 @@ on:
 
 
 env:
-  KOSLI_ORG: cyber-dojo
-  KOSLI_FLOW: exercises-start-points-ci
-  KOSLI_TRAIL: ${{ github.sha }}
+  KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}           # False
   KOSLI_HOST: "https://app.kosli.com"
   KOSLI_HOST_STAGING: "https://staging.app.kosli.com"
-
+  KOSLI_ORG: ${{ vars.KOSLI_ORG }}                   # cyber-dojo
+  KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}                 # exercises-start-points-ci
+  KOSLI_TRAIL: ${{ github.sha }}
+  SERVICE_NAME: ${{ github.event.repository.name }}  # exercises-start-points
 
 jobs:
 
@@ -36,7 +37,7 @@ jobs:
     - name: Prepare outputs for fivexl deployment workflow
       id: vars
       run: |
-        echo "service_name=exercises-start-points"                          >> ${GITHUB_OUTPUT}
+        echo "service_name=${{ env.SERVICE_NAME }}"                         >> ${GITHUB_OUTPUT}
         echo "image_tag=${{ inputs.IMAGE_TAG }}"                            >> ${GITHUB_OUTPUT}
         echo "aws_account_id=244531986313"                                  >> ${GITHUB_OUTPUT}
         echo "ecr_registry=244531986313.dkr.ecr.eu-central-1.amazonaws.com" >> ${GITHUB_OUTPUT}
