@@ -67,7 +67,7 @@ jobs:
         run:
           kosli attest pullrequest github
             --github-token=${{ secrets.GITHUB_TOKEN }}
-            --name=exercises-start-points.pull-request
+            --name=pull-request
 
 
   build-image:
