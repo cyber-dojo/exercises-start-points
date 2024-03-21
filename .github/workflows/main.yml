@@ -8,7 +8,6 @@ on:
 env:
   KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}           # False
   KOSLI_HOST: ${{ vars.KOSLI_HOST }}                 # https://app.kosli.com
-  KOSLI_HOST_STAGING: ${{ vars.KOSLI_HOST_STAGING }} # https://staging.app.kosli.com
   KOSLI_ORG: ${{ vars.KOSLI_ORG }}                   # cyber-dojo
   KOSLI_FLOW: ${{ vars.KOSLI_FLOW }}                 # exercises-start-points-ci
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
@@ -238,7 +237,6 @@ jobs:
       IMAGE_TAG: ${{ needs.kosli-trail.outputs.image_tag }}
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
-      KOSLI_API_TOKEN_STAGING: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
 
 
   approve-deployment-to-prod:
@@ -274,4 +272,3 @@ jobs:
       IMAGE_TAG: ${{ needs.kosli-trail.outputs.image_tag }}
     secrets:
       KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
-      KOSLI_API_TOKEN_STAGING: ${{ secrets.KOSLI_API_TOKEN_STAGING }}
