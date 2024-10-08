@@ -65,13 +65,14 @@ set_git_repo_dir()
     echo "So copying it to ${url}"
     cp -r "${abs_root_dir}" "${TMP_DIR}"
     echo "Committing the changes in ${url}"
-    cd ${url}
+    pushd ${url}
     git config user.email 'cyber-dojo-machine-user@cyber-dojo.org'
     git config user.name 'CyberDojoMachineUser'
     git add .
     git commit -m 'Save'
     echo "Using ${url}"
     GIT_REPO_DIR="${url}"
+    popd
   fi
 }
 
@@ -145,6 +146,9 @@ tag_the_image_to_latest()
   # remove_all_but_latest_images relies on :latest existing
   # so as not to bust all the docker layer caching
   docker tag "$(image_name):$(git_commit_tag)" "$(image_name):latest"
+  # tag for makefile snyk-container test
+  local -r head=$(git rev-parse HEAD | head -c7)
+  docker tag "$(image_name):$(git_commit_tag)" "cyberdojo/exercises-start-points:${head}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
