@@ -45,13 +45,13 @@ jobs:
           fetch-depth: 1
 
       - name: Setup Kosli CLI
-        if: ${{ github.ref }} == 'refs/heads/main'
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest pull-request evidence to Kosli
-        if: ${{ github.ref }} == 'refs/heads/main'
+        if: ${{ github.ref == 'refs/heads/main' }}
         run:
           kosli attest pullrequest github
             --github-token=${{ secrets.GITHUB_TOKEN }}
@@ -84,13 +84,13 @@ jobs:
           docker push "${IMAGE_NAME}"
 
       - name: Setup Kosli CLI
-        if: ${{ github.ref }} == 'refs/heads/main'
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest artifact provenance to Kosli
-        if: ${{ github.ref }} == 'refs/heads/main'
+        if: ${{ github.ref == 'refs/heads/main' }}
         run:
           kosli attest artifact "${IMAGE_NAME}"
             --artifact-type=docker
@@ -128,13 +128,13 @@ jobs:
             --policy-path=.snyk
 
       - name: Setup Kosli CLI
-        if: ${{ github.ref }} == 'refs/heads/main' && (success() || failure())
+        if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Run Snyk container scan and report results to Kosli
-        if: ${{ github.ref }} == 'refs/heads/main' && (success() || failure())
+        if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
         env:
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
         run:
@@ -167,13 +167,13 @@ jobs:
             .
 
       - name: Setup Kosli CLI
-        if: ${{ github.ref }} == 'refs/heads/main' && (success() || failure())
+        if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest results to Kosli
-        if: ${{ github.ref }} == 'refs/heads/main' && (success() || failure())
+        if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
         env:
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
         run:
@@ -187,13 +187,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Kosli CLI
-        if: ${{ github.ref }} == 'refs/heads/main'
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Kosli SDLC gate to short-circuit the workflow
-        if: ${{ github.ref }} == 'refs/heads/main'
+        if: ${{ github.ref == 'refs/heads/main' }}
         env:
           IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
@@ -213,13 +213,13 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Kosli CLI
-        if: ${{ github.ref }} == 'refs/heads/main'
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest approval of deployment to Kosli
-        if: ${{ github.ref }} == 'refs/heads/main'
+        if: ${{ github.ref == 'refs/heads/main' }}
         env:
           IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
@@ -250,13 +250,13 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Kosli CLI
-        if: ${{ github.ref }} == 'refs/heads/main'
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest approval of deployment to Kosli
-        if: ${{ github.ref }} == 'refs/heads/main'
+        if: ${{ github.ref == 'refs/heads/main' }}
         env:
           IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
           KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.kosli_fingerprint }}
