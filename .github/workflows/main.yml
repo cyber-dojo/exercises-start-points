@@ -106,7 +106,7 @@ jobs:
 
       - name: Build image
         run: |
-          git fetch origin main:main
+          git fetch origin main:main || true
           make image
 
       - uses: docker/login-action@v3
