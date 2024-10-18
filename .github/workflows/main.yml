@@ -2,6 +2,8 @@ name: Main - Attests to https://app.kosli.com
 
 on:
   push:
+    branches:
+      - main
 
 env:
   KOSLI_DRY_RUN: ${{ vars.KOSLI_DRY_RUN }}           # false
