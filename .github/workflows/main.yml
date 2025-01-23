@@ -136,6 +136,10 @@ jobs:
       - name: Make artifact fingerprint available to following jobs
         id: variables
         run: |
+          # The kosli-fingerprint command here is the CLI live-docs example.  
+          # If you build an image with an action, you can get the fingerprint from the action's output.
+          # For example, see
+          # https://github.com/cyber-dojo/differ/blob/cb626974c4bb091c716fcc978b833dd11d93c348/.github/workflows/main.yml#L205
           FINGERPRINT=$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker)
           echo "kosli_fingerprint=${FINGERPRINT}" >> ${GITHUB_OUTPUT}
 
