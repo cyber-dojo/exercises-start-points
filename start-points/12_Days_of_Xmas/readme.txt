@@ -52,7 +52,7 @@ Three french hens
 Two turtle doves and
 A partridge in a pear tree.
 
-On the eight day of Christmas,
+On the eighth day of Christmas,
 My true love gave to me:
 Eight maids a-milking
 Seven swans a-swimming
