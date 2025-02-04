@@ -160,6 +160,11 @@ jobs:
           path: ${{ env.IMAGE_TAR_FILENAME }}
           key: ${{ env.IMAGE_NAME }}
 
+      - name: Setup Kosli CLI
+        uses: kosli-dev/setup-cli-action@v2
+        with:
+          version: ${{ vars.KOSLI_CLI_VERSION }}
+
       - name: Make artifact digest available to following jobs
         id: variables
         run: |
@@ -169,11 +174,6 @@ jobs:
           # https://github.com/cyber-dojo/differ/blob/cb626974c4bb091c716fcc978b833dd11d93c348/.github/workflows/main.yml#L205
           DIGEST=$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker)
           echo "digest=${DIGEST}" >> ${GITHUB_OUTPUT}
-
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest image provenance to Kosli
         if: ${{ github.ref == 'refs/heads/main' }}
