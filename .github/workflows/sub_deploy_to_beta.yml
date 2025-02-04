@@ -44,7 +44,7 @@ jobs:
         echo "gh_actions_iam_role_name=gh_actions_services"                                   >> ${GITHUB_OUTPUT}
 
   deploy-to-aws-beta:
-    needs: [variables, push-image-to-beta-ecr]
+    needs: [variables]
     permissions:
       id-token: write
       contents: write
