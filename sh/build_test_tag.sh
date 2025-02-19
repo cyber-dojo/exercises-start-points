@@ -6,8 +6,8 @@ readonly SH_DIR="$(repo_root)/sh"
 readonly TMP_DIR=$(mktemp -d /tmp/cyber-dojo.exercises-start-points.XXXXXXXXX)
 trap "rm -rf ${TMP_DIR} > /dev/null" INT EXIT
 source "${SH_DIR}/lib.sh"
-source "${SH_DIR}/echo_versioner_env_vars.sh"
-export $(echo_versioner_env_vars)
+source "${SH_DIR}/echo_env_vars.sh"
+export $(echo_env_vars)
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 build_test_tag()
