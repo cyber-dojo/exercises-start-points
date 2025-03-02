@@ -205,9 +205,14 @@ jobs:
           echo -------
           cat se
           echo -------
+
+          DIGEST_1="$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker)"
+          echo "DIGEST_1=:${DIGEST_1}:"
           
-          DIGEST=$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker --debug=false)
-          echo "digest=${DIGEST}" >> ${GITHUB_OUTPUT}
+          DIGEST_2="$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker --debug=false)"
+          echo "DIGEST_2=:${DIGEST_2}:"
+          
+          echo "digest=${DIGEST_2}" >> ${GITHUB_OUTPUT}
 
       - name: Attest image provenance to Kosli
         if: ${{ github.ref == 'refs/heads/main' }}
