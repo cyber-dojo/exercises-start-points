@@ -188,31 +188,16 @@ jobs:
         id: variables
         run: |
           # The kosli-fingerprint command here is the CLI live-docs example.  
-          # If you build an image with an action, you can get the fingerprint from the action's output.
+          # NOTE: in a Github Action, stdout and stderr appear to redirected to the same tty.
+          # This means that the output of the $(subshell) is not just stdout, it is stdout+stderr.
+          # To be sure we are not printing to stderr, we set the --debug=false flag explicitly.
+          #
+          # If you build an image with a Github Action, you can get the fingerprint from the action's output.
           # For example, see
           # https://github.com/cyber-dojo/differ/blob/cb626974c4bb091c716fcc978b833dd11d93c348/.github/workflows/main.yml#L205
           
-          kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker 1> so 2> se
-          echo -------
-          cat so
-          echo -------
-          cat se
-          echo -------
-          
-          kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker --debug=false 1> so 2> se
-          echo -------
-          cat so
-          echo -------
-          cat se
-          echo -------
-
-          DIGEST_1="$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker)"
-          echo "DIGEST_1=:${DIGEST_1}:"
-          
-          DIGEST_2="$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker --debug=false)"
-          echo "DIGEST_2=:${DIGEST_2}:"
-          
-          echo "digest=${DIGEST_2}" >> ${GITHUB_OUTPUT}
+          DIGEST="$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker --debug=false)"
+          echo "digest=${DIGEST}" >> ${GITHUB_OUTPUT}
 
       - name: Attest image provenance to Kosli
         if: ${{ github.ref == 'refs/heads/main' }}
