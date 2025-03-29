@@ -187,14 +187,13 @@ jobs:
       - name: Make artifact digest available to following jobs
         id: variables
         run: |
-          # The kosli-fingerprint command here is the CLI live-docs example.  
-          # NOTE: in a Github Action, stdout and stderr appear to redirected to the same tty.
-          # This means that the output of the $(subshell) is not just stdout, it is stdout+stderr.
-          # To be sure we are not printing to stderr, we set the --debug=false flag explicitly.
-          #
           # If you build an image with a Github Action, you can get the fingerprint from the action's output.
-          # For example, see
-          # https://github.com/cyber-dojo/differ/blob/cb626974c4bb091c716fcc978b833dd11d93c348/.github/workflows/main.yml#L205
+          # For example, https://github.com/cyber-dojo/differ/blob/cb626974c4bb091c716fcc978b833dd11d93c348/.github/workflows/main.yml#L205
+          
+          # The kosli-fingerprint command here is the CLI live-docs example.  
+          # NOTE: in a Github Action, stdout and stderr multiplex to the same tty!
+          # This means that the output of the $(subshell) is not just stdout, it is stdout+stderr.
+          # To be sure we are not capturing to stderr, we set the --debug=false flag explicitly.
           
           DIGEST="$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker --debug=false)"
           echo "digest=${DIGEST}" >> ${GITHUB_OUTPUT}
