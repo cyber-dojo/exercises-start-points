@@ -18,7 +18,6 @@ env:
   AWS_ACCOUNT_ID_BETA: ${{ vars.AWS_ACCOUNT_ID_BETA }}
   DOCKER_API_VERSION:  ${{ vars.DOCKER_API_VERSION }}
   SERVICE_NAME:        ${{ github.event.repository.name }}  # exercises-start-points
-  IMAGE_TAR_FILENAME:  /tmp/${{ github.event.repository.name }}:${{ github.sha }}.tar
 
 jobs:
 
@@ -135,7 +134,9 @@ jobs:
       id-token: write
       contents: write
     outputs:
-      digest: ${{ steps.variables.outputs.digest }}
+      digest:     ${{ steps.docker-push.outputs.digest }}
+      cache_path: ${{ steps.set-cache.outputs.cache_path }}
+      cache_key:  ${{ steps.set-cache.outputs.cache_key }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -160,46 +161,48 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Push image to registry
-        run:
-          docker push "${IMAGE_NAME}"
-
-      - name: Save Docker image
-        run:
-          docker image save ${IMAGE_NAME}
-            --output ${IMAGE_TAR_FILENAME}
-
-      - name: Cache Docker image
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.IMAGE_TAR_FILENAME }}
-          key:  ${{ env.IMAGE_NAME }}
+      - name: Push image to registry and make digest available
+        id: docker-push
+        run: |
+          FILENAME=/tmp/docker-push.log
+          docker push "${IMAGE_NAME}" > "${FILENAME}"
+          # Last line of FILENAME
+          # 40907a7: digest: sha256:6fbb86fc2f21bf090a74282bdc37e713cdf7f227b30571a57e5de9622cb01e34 size: 3036
+          DIGEST="$(cat "${FILENAME}" | tail -n 1 | cut -d':' -f4 | cut -d' ' -f1)"
+          echo "DIGEST=${DIGEST}" >> ${GITHUB_ENV}
+          echo "digest=${DIGEST}" >> ${GITHUB_OUTPUT}
 
       - name: Setup Kosli CLI
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
-      - name: Make artifact digest available to following jobs
-        id: variables
-        run: |
-          # If you build an image with a Github Action, you can get the fingerprint from the action's output.
-          # For example, https://github.com/cyber-dojo/differ/blob/cb626974c4bb091c716fcc978b833dd11d93c348/.github/workflows/main.yml#L205
-          
-          # The kosli-fingerprint command here is the CLI live-docs example.  
-          # NOTE: in a Github Action, stdout and stderr multiplex to the same tty!
-          # This means that the output of the $(subshell) is not just stdout, it is stdout+stderr.
-          # To be sure we are not capturing to stderr, we set the --debug=false flag explicitly.
-          
-          DIGEST="$(kosli fingerprint "${IMAGE_NAME}" --artifact-type=docker --debug=false)"
-          echo "digest=${DIGEST}" >> ${GITHUB_OUTPUT}
-
-      - name: Attest image provenance to Kosli
+      - name: Attest image evidence to Kosli
         if: ${{ github.ref == 'refs/heads/main' }}
         run:
-          kosli attest artifact "${IMAGE_NAME}"
-            --artifact-type=docker
-            --name=exercises-start-points
+          kosli attest artifact "${IMAGE_NAME}"          
+            --fingerprint="${{ steps.docker-push.outputs.digest }}"
+            --name=custom-start-points
+
+      - name: Set image cache outputs
+        id: set-cache
+        run: |
+          CACHE_PATH=${{ env.DIGEST }}.tar
+          echo "CACHE_PATH=${CACHE_PATH}" >> ${GITHUB_ENV}
+          echo "cache_path=${CACHE_PATH}" >> ${GITHUB_OUTPUT}
+          echo "CACHE_KEY=${IMAGE_NAME}"  >> ${GITHUB_ENV} 
+          echo "cache_key=${IMAGE_NAME}"  >> ${GITHUB_OUTPUT} 
+
+      - name: Save image
+        run:
+          docker image save ${{ env.CACHE_KEY }}
+            --output ${{ env.CACHE_PATH }}
+
+      - name: Cache image
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CACHE_PATH }}
+          key:  ${{ env.CACHE_KEY }}
 
 
   snyk-container-scan:
@@ -208,6 +211,8 @@ jobs:
     env:
       IMAGE_NAME:        ${{ needs.setup.outputs.image_name }}
       KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
+      CACHE_KEY:         ${{ needs.build-image.outputs.cache_key }}
+      CACHE_PATH:        ${{ needs.build-image.outputs.cache_path }}
       SARIF_FILENAME:    snyk.container.scan.json
     steps:
       - uses: actions/checkout@v4
@@ -217,13 +222,13 @@ jobs:
       - name: Retrieve Docker image from cache
         uses: actions/cache@v4
         with:
-          path: ${{ env.IMAGE_TAR_FILENAME }}
-          key:  ${{ env.IMAGE_NAME }}
+          key:  ${{ env.CACHE_KEY }}
+          path: ${{ env.CACHE_PATH }}
 
       - name: Load Docker image
         run:
-          docker image load
-            --input "${IMAGE_TAR_FILENAME}"
+          docker image load 
+            --input "${{ env.CACHE_PATH }}"
 
       - name: Setup Snyk
         uses: snyk/actions/setup@master
