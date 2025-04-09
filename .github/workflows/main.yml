@@ -182,7 +182,7 @@ jobs:
         run:
           kosli attest artifact "${IMAGE_NAME}"          
             --fingerprint="${{ steps.docker-push.outputs.digest }}"
-            --name=custom-start-points
+            --name=exercises-start-points
 
       - name: Set image cache outputs
         id: set-cache
