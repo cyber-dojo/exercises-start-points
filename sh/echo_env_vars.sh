@@ -8,4 +8,6 @@ echo_env_vars()
   #
   echo CYBER_DOJO_EXERCISES_START_POINTS_SHA="$(git_commit_sha)"
   echo CYBER_DOJO_EXERCISES_START_POINTS_TAG="$(git_commit_tag)"
+  #
+  cat $(repo_root)/Basefile.env
 }
