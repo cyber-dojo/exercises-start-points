@@ -14,12 +14,11 @@ git_commit_tag()
 
 image_name()
 {
-  # set in
-  # export $(echo_versioner_env_vars)
   echo "${CYBER_DOJO_EXERCISES_START_POINTS_IMAGE}"
 }
 
-image_sha()
+image_base_sha()
 {
-  docker run --entrypoint='' --rm "$(image_name):$(git_commit_tag)" sh -c 'echo ${SHA}'
+  docker run --entrypoint='' --rm "$(image_name):$(git_commit_tag)" \
+    sh -c 'echo ${CYBER_DOJO_START_POINTS_BASE_SHA}'
 }
