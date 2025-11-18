@@ -9,5 +9,3 @@ trail:
       attestations:
         - name: snyk-container-scan
           type: snyk
-        # - name: snyk-code-scan
-        #   type: snyk
