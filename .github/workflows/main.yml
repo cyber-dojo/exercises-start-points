@@ -50,22 +50,13 @@ jobs:
             echo "image_name=${IMAGE_NAME}"                     
           } >> ${GITHUB_OUTPUT}          
 
-      - name: Setup Kosli CLI
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ vars.KOSLI_CLI_VERSION }}
-
-      - name: Create Kosli Flow
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run:
-          kosli create flow "${KOSLI_FLOW}"
-            --description="Exercises choices"
-
+      # https://github.com/cyber-dojo/kosli-begin-trail
       - name: Begin Kosli Trail
         if: ${{ github.ref == 'refs/heads/main' }}
-        run:
-          kosli begin trail "${KOSLI_TRAIL}"
-            --template-file=.kosli.yml
+        uses: cyber-dojo/kosli-begin-trail@main
+        with:
+          cli_version: "${{ vars.KOSLI_CLI_VERSION }}"
+          flow_description: "Exercises choices"
 
 
   pull-request:
