@@ -134,6 +134,7 @@ jobs:
           echo "digest=${DIGEST}" >> ${GITHUB_OUTPUT}
 
       - name: Setup Kosli CLI
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
@@ -204,13 +205,13 @@ jobs:
             --sarif-file-output="${SARIF_FILENAME}" 
 
       - name: Setup Kosli CLI
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
         uses: kosli-dev/setup-cli-action@v2
         with:
           version: ${{ vars.KOSLI_CLI_VERSION }}
 
       - name: Attest evidence to Kosli
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
         run:
           kosli attest snyk
             --attachments=.snyk          
