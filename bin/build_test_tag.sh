@@ -2,12 +2,12 @@
 set -Eeu
 
 repo_root() { git rev-parse --show-toplevel; }
-readonly SH_DIR="$(repo_root)/sh"
+readonly BIN_DIR="$(repo_root)/bin"
+source "${BIN_DIR}/lib.sh"
+source "${BIN_DIR}/echo_env_vars.sh"
+export $(echo_env_vars)
 readonly TMP_DIR=$(mktemp -d /tmp/cyber-dojo.exercises-start-points.XXXXXXXXX)
 trap "rm -rf ${TMP_DIR} > /dev/null" INT EXIT
-source "${SH_DIR}/lib.sh"
-source "${SH_DIR}/echo_env_vars.sh"
-export $(echo_env_vars)
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 build_test_tag()
@@ -25,11 +25,13 @@ build_test_tag()
 # - - - - - - - - - - - - - - - - - - - - - - -
 exit_non_zero_unless_installed()
 {
-  local -r name="${1}"
-  if ! installed "${name}"; then
-    stderr "ERROR: ${name} is not installed"
-    exit 42
-  fi
+  for dependent in "$@"
+  do
+    if ! installed "${dependent}" ; then
+      stderr "${dependent} is not installed!"
+      exit_non_zero
+    fi
+  done
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - -
@@ -46,7 +48,7 @@ installed()
 # - - - - - - - - - - - - - - - - - - - - - - -
 stderr()
 {
-  >&2 echo "${1}"
+  >&2 echo "ERROR: ${1:-}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - -
@@ -113,9 +115,9 @@ assert_base_sha_env_var_inside_image_matches_basefile_env()
   local -r expected="$(image_base_sha)"
   local -r actual="${CYBER_DOJO_START_POINTS_BASE_SHA}"
   if [ "${expected}" != "${actual}" ]; then
-    echo ERROR
-    echo "expected:'${expected}'"
-    echo "  actual:'${actual}'"
+    stderr
+    stderr "expected:'${expected}'"
+    stderr "  actual:'${actual}'"
     exit 42
   fi
 }
@@ -150,10 +152,9 @@ show_env_vars()
 {
   # If you doing local development, your echo_versioner_env_vars() function
   # (in dependent repos), will need to add these overrides.
-  echo "echo CYBER_DOJO_EXERCISES_START_POINTS_SHA=$(git_commit_sha)"
-  echo "echo CYBER_DOJO_EXERCISES_START_POINTS_TAG=$(git_commit_tag)"
+  echo "  echo CYBER_DOJO_EXERCISES_START_POINTS_SHA=$(git_commit_sha)"
+  echo "  echo CYBER_DOJO_EXERCISES_START_POINTS_TAG=$(git_commit_tag)"
 }
 
-exit_non_zero_unless_installed docker
-exit_non_zero_unless_installed git
+exit_non_zero_unless_installed docker git
 build_test_tag
