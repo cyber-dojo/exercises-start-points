@@ -5,7 +5,7 @@ IMAGE_NAME := cyberdojo/exercises-start-points:${SHORT_SHA}
 .PHONY: image snyk-container snyk-code
 
 image:
-	${PWD}/sh/build_test_tag.sh
+	${PWD}/bin/build_test_tag.sh
 
 snyk-container: image
 	snyk container test ${IMAGE_NAME} \
