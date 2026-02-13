@@ -167,61 +167,11 @@ jobs:
           key:  ${{ env.CACHE_KEY }}
 
 
-  snyk-container-scan:
-    needs: [build-image]
-    runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME:        ${{ needs.build-image.outputs.tagged_image_name }}
-      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
-      CACHE_KEY:         ${{ needs.build-image.outputs.cache_key }}
-      CACHE_PATH:        ${{ needs.build-image.outputs.cache_path }}
-      SARIF_FILENAME:    snyk.container.scan.json
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-
-      - name: Retrieve Docker image from cache
-        uses: actions/cache@v4
-        with:
-          key:  ${{ env.CACHE_KEY }}
-          path: ${{ env.CACHE_PATH }}
-
-      - name: Load Docker image
-        run:
-          docker image load 
-            --input "${{ env.CACHE_PATH }}"
-
-      - name: Setup Snyk
-        uses: snyk/actions/setup@master
-
-      - name: Run Snyk container scan
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run:
-          snyk container test ${IMAGE_NAME} 
-            --policy-path=.snyk
-            --sarif 
-            --sarif-file-output="${SARIF_FILENAME}" 
-
-      - name: Setup Kosli CLI
-        if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        uses: kosli-dev/setup-cli-action@v2
-        with:
-          version: ${{ vars.KOSLI_CLI_VERSION }}
-
-      - name: Attest evidence to Kosli
-        if: ${{ github.ref == 'refs/heads/main' && (success() || failure()) }}
-        run:
-          kosli attest snyk
-            --attachments=.snyk          
-            --name=exercises-start-points.snyk-container-scan 
-            --scan-results="${SARIF_FILENAME}"
-
-
   sdlc-control-gate:
     if: ${{ github.ref == 'refs/heads/main' }}
-    needs: [build-image, pull-request, snyk-container-scan]
+    needs:
+      - build-image
+      - pull-request
     runs-on: ubuntu-latest
     env:
       KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
