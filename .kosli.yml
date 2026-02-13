@@ -4,8 +4,3 @@ trail:
   attestations:
     - name: pull-request
       type: pull_request
-  artifacts:
-    - name: exercises-start-points
-      attestations:
-        - name: snyk-container-scan
-          type: snyk
