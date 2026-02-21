@@ -50,7 +50,6 @@ jobs:
             echo "image_name=${IMAGE_NAME}"                     
           } >> ${GITHUB_OUTPUT}          
 
-      # https://github.com/cyber-dojo/kosli-begin-trail
       - name: Begin Kosli Trail
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: cyber-dojo/kosli-begin-trail@main
@@ -167,10 +166,28 @@ jobs:
           key:  ${{ env.CACHE_KEY }}
 
 
+  # https://github.com/cyber-dojo/snyk-container-test/blob/main/action.yml
+  snyk-container-scan:
+    needs: [setup, build-image]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - name: Run snyk-container-test and attest results to Kosli
+        uses: cyber-dojo/snyk-container-test@main
+        with:
+          snyk_token:        ${{ secrets.SNYK_TOKEN }}
+          image_name:        ${{ needs.setup.outputs.image_name }}
+          kosli_cli_version: ${{ vars.KOSLI_CLI_VERSION }}
+          attestation_name:  exercises-start-points.snyk-container-scan
+
+
   sdlc-control-gate:
     if: ${{ github.ref == 'refs/heads/main' }}
     needs:
       - build-image
+      - snyk-container-scan
       - pull-request
     runs-on: ubuntu-latest
     env:
