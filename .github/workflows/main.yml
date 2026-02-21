@@ -145,26 +145,6 @@ jobs:
             --fingerprint="${{ steps.docker-push.outputs.digest }}"
             --name=exercises-start-points
 
-      - name: Set image cache outputs
-        id: set-cache
-        run: |
-          CACHE_PATH=${{ env.DIGEST }}.tar
-          echo "CACHE_PATH=${CACHE_PATH}" >> ${GITHUB_ENV}
-          echo "cache_path=${CACHE_PATH}" >> ${GITHUB_OUTPUT}
-          echo "CACHE_KEY=${IMAGE_NAME}"  >> ${GITHUB_ENV} 
-          echo "cache_key=${IMAGE_NAME}"  >> ${GITHUB_OUTPUT} 
-
-      - name: Save image
-        run:
-          docker image save ${{ env.CACHE_KEY }}
-            --output ${{ env.CACHE_PATH }}
-
-      - name: Cache image
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.CACHE_PATH }}
-          key:  ${{ env.CACHE_KEY }}
-
 
   # https://github.com/cyber-dojo/snyk-container-test/blob/main/action.yml
   snyk-container-scan:
