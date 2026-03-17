@@ -32,7 +32,7 @@ jobs:
       image_tag:                ${{ steps.vars.outputs.image_tag }}
       image_name:               ${{ steps.vars.outputs.image_name }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set outputs
         id: vars
@@ -67,7 +67,7 @@ jobs:
       contents:      read
       pull-requests: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
@@ -98,7 +98,7 @@ jobs:
       cache_path:        ${{ steps.set-cache.outputs.cache_path }}
       cache_key:         ${{ steps.set-cache.outputs.cache_key }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
@@ -109,13 +109,13 @@ jobs:
           docker tag cyberdojo/${SERVICE_NAME}:${IMAGE_TAG} "${IMAGE_NAME}"           
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-region:            ${{ needs.setup.outputs.aws_region }}
           role-duration-seconds: 900
           role-session-name:     ${{ github.event.repository.name }}
           role-to-assume:        arn:aws:iam::${{ needs.setup.outputs.aws_account_id_beta }}:role/${{ needs.setup.outputs.gh_actions_iam_role_name }}
-          mask-aws-account-id:   no
+          mask-aws-account-id:   false
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -197,7 +197,7 @@ jobs:
       name: staging
       url:  https://beta.cyber-dojo.org
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
