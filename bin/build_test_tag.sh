@@ -12,8 +12,6 @@ trap "rm -rf ${TMP_DIR} > /dev/null" INT EXIT
 # - - - - - - - - - - - - - - - - - - - - - - - -
 build_test_tag()
 {
-  exit_non_zero_unless_installed docker
-  exit_non_zero_unless_installed git
   echo; remove_old_images
   echo; set_git_repo_dir
   echo; build_tagged_image
