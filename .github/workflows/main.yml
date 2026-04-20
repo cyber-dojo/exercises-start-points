@@ -161,13 +161,27 @@ jobs:
           kosli_cli_version: ${{ vars.KOSLI_CLI_VERSION }}
           attestation_name:  exercises-start-points.snyk-container-scan
 
+  snyk-container-scan:
+    needs: [build-image]
+    uses: cyber-dojo/snyk-scanning/.github/workflows/artifact_snyk_test.yml@main
+    with:
+      aws_rolename: gh_actions_services
+      artifact_name: ${{ needs.build-image.outputs.tagged_image_name }}
+      kosli_flow: ${{vars.KOSLI_FLOW}}
+      kosli_trail: ${{github.sha}}
+      kosli_attestation_name: exercises-start-points.new-snyk-container-scan
+    secrets:
+      snyk_token: ${{ secrets.SNYK_TOKEN }}
+      kosli_api_token: ${{ secrets.KOSLI_API_TOKEN }}
+
 
   sdlc-control-gate:
     if: ${{ github.ref == 'refs/heads/main' }}
     needs:
-      - build-image
-      - snyk-container-scan
       - pull-request
+      - build-image
+      - snyk-container-scan-old
+      - snyk-container-scan
     runs-on: ubuntu-latest
     env:
       KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
