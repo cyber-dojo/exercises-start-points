@@ -145,23 +145,6 @@ jobs:
             --name=exercises-start-points
 
 
-  # https://github.com/cyber-dojo/snyk-container-test/blob/main/action.yml
-  snyk-container-scan-old:
-    needs: [setup, build-image]
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: write
-    steps:
-      - name: Run snyk-container-test and attest results to Kosli
-        uses: cyber-dojo/snyk-container-test@main
-        with:
-          snyk_token:        ${{ secrets.SNYK_TOKEN }}
-          image_name:        ${{ needs.setup.outputs.image_name }}
-          kosli_cli_version: ${{ vars.KOSLI_CLI_VERSION }}
-          attestation_name:  exercises-start-points.snyk-container-scan
-
-
   snyk-container-scan:
     needs: [build-image]
     uses: cyber-dojo/snyk-scanning/.github/workflows/artifact_snyk_test.yml@main
@@ -170,7 +153,7 @@ jobs:
       artifact_name: ${{ needs.build-image.outputs.tagged_image_name }}
       kosli_flow: ${{vars.KOSLI_FLOW}}
       kosli_trail: ${{github.sha}}
-      kosli_attestation_name: exercises-start-points.new-snyk-container-scan
+      kosli_attestation_name: exercises-start-points.snyk-container-scan
     secrets:
       snyk_token: ${{ secrets.SNYK_TOKEN }}
       kosli_api_token: ${{ secrets.KOSLI_API_TOKEN }}
