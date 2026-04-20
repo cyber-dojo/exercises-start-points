@@ -146,7 +146,7 @@ jobs:
 
 
   # https://github.com/cyber-dojo/snyk-container-test/blob/main/action.yml
-  snyk-container-scan:
+  snyk-container-scan-old:
     needs: [setup, build-image]
     runs-on: ubuntu-latest
     permissions:
@@ -160,6 +160,7 @@ jobs:
           image_name:        ${{ needs.setup.outputs.image_name }}
           kosli_cli_version: ${{ vars.KOSLI_CLI_VERSION }}
           attestation_name:  exercises-start-points.snyk-container-scan
+
 
   snyk-container-scan:
     needs: [build-image]
