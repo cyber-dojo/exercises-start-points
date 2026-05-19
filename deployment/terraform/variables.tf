@@ -19,12 +19,12 @@ variable "cpu_limit" {
 
 variable "mem_limit" {
   type    = number
-  default = 64
+  default = 128
 }
 
 variable "mem_reservation" {
   type    = number
-  default = 32
+  default = 96
 }
 
 variable "container_restart_policy_enabled" {
