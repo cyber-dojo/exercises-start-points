@@ -88,8 +88,6 @@ jobs:
     outputs:
       tagged_image_name: ${{ needs.setup.outputs.image_name }}
       digest:            ${{ steps.docker-push.outputs.digest }}
-      cache_path:        ${{ steps.set-cache.outputs.cache_path }}
-      cache_key:         ${{ steps.set-cache.outputs.cache_key }}
     steps:
       - uses: cyber-dojo/harden-runner@main
       - uses: cyber-dojo/pinned-checkout@main
@@ -139,8 +137,8 @@ jobs:
     uses: cyber-dojo/snyk-scanning/.github/workflows/artifact_snyk_test.yml@main
     with:
       artifact_name: ${{ needs.build-image.outputs.tagged_image_name }}
-      kosli_flow: ${{vars.KOSLI_FLOW}}
-      kosli_trail: ${{github.sha}}
+      kosli_flow: ${{ vars.KOSLI_FLOW }}
+      kosli_trail: ${{ github.sha }}
       kosli_attestation_name: exercises-start-points.snyk-container-scan
     secrets:
       snyk_token: ${{ secrets.SNYK_TOKEN }}
@@ -154,8 +152,6 @@ jobs:
       - build-image
       - snyk-container-scan
     runs-on: ubuntu-latest
-    env:
-      KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
     steps:
       - uses: cyber-dojo/harden-runner@main
       - uses: cyber-dojo/setup-kosli-cli@main
@@ -165,6 +161,8 @@ jobs:
           kosli get trail "${KOSLI_TRAIL}"
 
       - name: Kosli SDLC gate to short-circuit the workflow
+        env:
+          KOSLI_FINGERPRINT: ${{ needs.build-image.outputs.digest }}
         run:
           kosli assert artifact
             --environment=${KOSLI_AWS_BETA}
