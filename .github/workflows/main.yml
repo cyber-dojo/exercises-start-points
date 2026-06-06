@@ -58,6 +58,8 @@ jobs:
         uses: cyber-dojo/kosli-begin-trail@main
         with:
           flow_description: "Exercises choices"
+          flow_tags: |
+            env=aws-beta
 
 
   pull-request:
