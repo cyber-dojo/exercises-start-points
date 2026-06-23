@@ -8,4 +8,4 @@ trail:
     - name: exercises-start-points
       attestations:
         - name: snyk-container-scan
-          type: generic
+          type: decision
