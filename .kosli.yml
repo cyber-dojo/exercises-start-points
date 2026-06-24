@@ -7,5 +7,11 @@ trail:
   artifacts:
     - name: exercises-start-points
       attestations:
+        - name: provenance
+          type: decision
+
+        - name: sbom
+          type: decision
+
         - name: snyk-container-scan
           type: decision
