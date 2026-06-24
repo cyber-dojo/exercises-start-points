@@ -137,6 +137,15 @@ jobs:
             --fingerprint="${{ steps.docker-push.outputs.digest }}"
             --name=exercises-start-points
 
+      - name: Attest provenance evidence to Kosli
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run:
+          kosli attest decision
+            --control SDLC-CTRL-0002
+            --compliant=true
+            --fingerprint="${{ steps.docker-push.outputs.digest }}"
+            --name provenance
+
 
   snyk-container-scan:
     if: ${{ github.ref == 'refs/heads/main' }}
