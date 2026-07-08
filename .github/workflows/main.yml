@@ -84,67 +84,24 @@ jobs:
 
   build-image:
     needs: [setup]
-    runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: ${{ needs.setup.outputs.image_name }}
-      IMAGE_TAG:  ${{ needs.setup.outputs.image_tag }}
     permissions:
       id-token: write
       contents: write
-    outputs:
-      tagged_image_name: ${{ needs.setup.outputs.image_name }}
-      digest:            ${{ steps.docker-push.outputs.digest }}
-    steps:
-      - uses: cyber-dojo/harden-runner@main
-      - uses: cyber-dojo/pinned-checkout@main
-      - uses: cyber-dojo/setup-kosli-cli@main
-
-      - name: Build image
-        run: |
-          git fetch origin main:main || true
-          make image
-          docker tag cyberdojo/${SERVICE_NAME}:${IMAGE_TAG} "${IMAGE_NAME}"           
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6
-        with:
-          aws-region:            ${{ needs.setup.outputs.aws_region }}
-          role-duration-seconds: 900
-          role-session-name:     ${{ github.event.repository.name }}
-          role-to-assume:        arn:aws:iam::${{ needs.setup.outputs.aws_account_id_beta }}:role/${{ needs.setup.outputs.gh_actions_iam_role_name }}
-          mask-aws-account-id:   false
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Push image to registry and make digest available
-        id: docker-push
-        run: |
-          FILENAME=/tmp/docker-push.log
-          docker push "${IMAGE_NAME}" > "${FILENAME}"
-          # Last line of FILENAME
-          # 40907a7: digest: sha256:6fbb86fc2f21bf090a74282bdc37e713cdf7f227b30571a57e5de9622cb01e34 size: 3036
-          DIGEST="$(cat "${FILENAME}" | tail -n 1 | cut -d':' -f4 | cut -d' ' -f1)"
-          echo "DIGEST=${DIGEST}" >> ${GITHUB_ENV}
-          echo "digest=${DIGEST}" >> ${GITHUB_OUTPUT}
-
-      - name: Attest image evidence to Kosli
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run:
-          kosli attest artifact "${IMAGE_NAME}"
-            --annotate type=build
-            --fingerprint="${{ steps.docker-push.outputs.digest }}"
-            --name=exercises-start-points
-
-      - name: Attest provenance evidence to Kosli
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run:
-          kosli attest decision
-            --control SDLC-CTRL-0002
-            --compliant=true
-            --fingerprint="${{ steps.docker-push.outputs.digest }}"
-            --name provenance
+      attestations: write
+      artifact-metadata: write
+    uses: cyber-dojo/reusable-actions-workflows/.github/workflows/secure-start-point-build.yml@main
+    with:
+      checkout_repository:  ${{ github.repository }}
+      checkout_ref:         ${{ github.sha }}
+      checkout_fetch_depth: "1"
+      image_name:           ${{ needs.setup.outputs.ecr_registry }}/${{ needs.setup.outputs.service_name }}
+      image_tag:            ${{ needs.setup.outputs.image_tag }}
+      kosli_flow:           ${{ needs.setup.outputs.kosli_flow }}
+      kosli_trail:          ${{ needs.setup.outputs.kosli_trail }}
+      kosli_reference_name: ${{ needs.setup.outputs.service_name }}
+      attest_to_kosli:      ${{ github.ref == 'refs/heads/main' }}
+    secrets:
+      kosli_api_token: ${{ secrets.KOSLI_API_TOKEN }}
 
 
   snyk-container-scan:
