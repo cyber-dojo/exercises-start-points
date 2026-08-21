@@ -12,11 +12,14 @@ trap "rm -rf ${TMP_DIR} > /dev/null" INT EXIT
 # - - - - - - - - - - - - - - - - - - - - - - - -
 build_test_tag()
 {
-  echo; remove_old_images
   echo; set_git_repo_dir
   echo; build_tagged_image
   echo; show_env_vars
   tag_the_image_to_latest
+  # After tagging, so removing an earlier build's tags takes its last tag with
+  # them and the image itself goes, rather than being left dangling when :latest
+  # moves to this build.
+  echo; remove_old_images
   assert_base_sha_env_var_inside_image_matches_basefile_env
 }
 
@@ -77,25 +80,27 @@ set_git_repo_dir()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
+# When doing local development, tagging images from the git commit sha
+# will cause a lot of old images to build up unless they are deleted.
+# Keeps :latest, which local tooling refers to, and this commit's tag, which
+# names the build just made. Every older tag goes, and an earlier build whose
+# last tag was one of those goes with it.
 remove_old_images()
 {
-  # When doing local development, tagging images from the git commit sha
-  # will cause a lot of old images to build up unless they are deleted.
-  local -r image_names=$(docker image ls --format "{{.Repository}}:{{.Tag}}")
-  remove_all_but_latest_images "${image_names}" "$(image_name)"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - -
-remove_all_but_latest_images()
-{
-  local -r docker_image_ls="${1}"
-  local -r name="${2}"
-  for image in `echo "${docker_image_ls}" | grep "${name}:"`
+  echo Removing old images
+  local -r name="$(image_name)"
+  # grep exits non-zero when the machine holds no image of this name, eg one
+  # whose images have just been cleared, so an empty list must not end the build.
+  local tagged_name
+  for tagged_name in $(docker image ls --format '{{.Repository}}:{{.Tag}}' | grep "^${name}:" || true)
   do
-    if [ "${image}" != "${name}:latest" ]; then
-      if [ "${image}" != "${name}:<none>" ]; then
-        docker image rm --force "${image}" || echo "  skipped ${image} (in use)"
-      fi
+    if [ "${tagged_name}" != "${name}:latest" ] \
+    && [ "${tagged_name}" != "${name}:$(git_commit_tag)" ]; then
+      # Removing by name:tag untags, so this succeeds even while a container
+      # references the image, leaving it dangling until that container goes.
+      # The guard is for a genuine daemon error: report it rather than abort the
+      # whole build under set -Eeu.
+      docker image rm --force "${tagged_name}" || echo "  ${tagged_name} not removed"
     fi
   done
 }
@@ -139,8 +144,7 @@ cyber_dojo()
 # - - - - - - - - - - - - - - - - - - - - - - - -
 tag_the_image_to_latest()
 {
-  # remove_all_but_latest_images relies on :latest existing
-  # so as not to bust all the docker layer caching
+  # remove_old_images keeps :latest so as not to bust all the docker layer caching
   docker tag "$(image_name):$(git_commit_tag)" "$(image_name):latest"
 }
 
