@@ -15,10 +15,8 @@ build_test_tag()
   echo; set_git_repo_dir
   echo; build_tagged_image
   echo; show_env_vars
-  tag_the_image_to_latest
-  # After tagging, so removing an earlier build's tags takes its last tag with
-  # them and the image itself goes, rather than being left dangling when :latest
-  # moves to this build.
+  # After building, so this build is protected by its own tag, and removing an
+  # earlier build's tags takes its last tag with them and the image itself goes.
   echo; remove_old_images
   assert_base_sha_env_var_inside_image_matches_basefile_env
 }
@@ -82,9 +80,8 @@ set_git_repo_dir()
 # - - - - - - - - - - - - - - - - - - - - - - - -
 # When doing local development, tagging images from the git commit sha
 # will cause a lot of old images to build up unless they are deleted.
-# Keeps :latest, which local tooling refers to, and this commit's tag, which
-# names the build just made. Every older tag goes, and an earlier build whose
-# last tag was one of those goes with it.
+# Keeps this commit's tag, which names the build just made. Every older tag
+# goes, and an earlier build whose last tag was one of those goes with it.
 remove_old_images()
 {
   echo Removing old images
@@ -94,8 +91,7 @@ remove_old_images()
   local tagged_name
   for tagged_name in $(docker image ls --format '{{.Repository}}:{{.Tag}}' | grep "^${name}:" || true)
   do
-    if [ "${tagged_name}" != "${name}:latest" ] \
-    && [ "${tagged_name}" != "${name}:$(git_commit_tag)" ]; then
+    if [ "${tagged_name}" != "${name}:$(git_commit_tag)" ]; then
       # Removing by name:tag untags, so this succeeds even while a container
       # references the image, leaving it dangling until that container goes.
       # The guard is for a genuine daemon error: report it rather than abort the
@@ -139,13 +135,6 @@ cyber_dojo()
     chmod 700 "${TMP_DIR}/${name}"
     echo "${TMP_DIR}/${name}"
   fi
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-tag_the_image_to_latest()
-{
-  # remove_old_images keeps :latest so as not to bust all the docker layer caching
-  docker tag "$(image_name):$(git_commit_tag)" "$(image_name):latest"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
