@@ -59,7 +59,10 @@ jobs:
         with:
           flow_description: "Exercises choices"
           flow_tags: |
-            env=aws-beta
+            env=${{ env.KOSLI_AWS_BETA }}
+            kind=build
+            ci=github
+            repo_url=${{ github.server_url }}/${{ github.repository }}
 
 
   pull-request:
