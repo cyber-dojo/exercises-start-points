@@ -2,7 +2,8 @@ name: 'Detect Drift (environment)'
 
 # Drift detection for a single environment.
 #
-# The terraform for this repository lives in deployment/terraform and deploys
+# The terraform for exercises-start-points lives in
+# deployment/terraform-exercises-start-points and deploys
 # the ECS service with a per-build container image (TF_VAR_TAGGED_IMAGE). The
 # variable has no default and the task definition tracks it directly, so a
 # drift plan must be given the image that is currently deployed - otherwise
@@ -63,6 +64,6 @@ jobs:
       aws_region: eu-central-1
       aws_role_arn: "arn:aws:iam::${{ inputs.aws_account_id }}:role/gh_actions_services"
       environment: ${{ inputs.environment }}
-      working_directory: deployment/terraform/
+      working_directory: deployment/terraform-exercises-start-points/
       tf_version: v1.14.9
       tf_vars: TF_VAR_TAGGED_IMAGE=${{ needs.image.outputs.image }}
